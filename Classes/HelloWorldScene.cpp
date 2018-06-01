@@ -360,6 +360,8 @@ void HelloWorld::onDraw()
 
 void HelloWorld::onDraw()
 {
+    auto m = Director::getInstance()->getProjectionMatrix(0);
+    auto mv = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     auto director = Director::getInstance();
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
@@ -375,13 +377,13 @@ void HelloWorld::onDraw()
 //    modelViewMatrix.scale(0.3);
     modelViewMatrix.translate(0.0, 0, -5);
     
-    static float rotation = 0;
-    modelViewMatrix.rotate(Vec3(1,1,0),CC_DEGREES_TO_RADIANS(rotation));
-    rotation += 0.5;
-    if (rotation > 360) {
-        rotation = 0;
-    }
-    
+//    static float rotation = 0;
+//    modelViewMatrix.rotate(Vec3(1,1,0),CC_DEGREES_TO_RADIANS(rotation));
+////    rotation += 0.5;
+////    if (rotation > 360) {
+////        rotation = 0;
+////    }
+//    
     director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, modelViewMatrix);
     
     auto program = getGLProgram();
@@ -403,6 +405,11 @@ void HelloWorld::onDraw()
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
 //    program->setUniformsForBuiltins();
+}
+
+cocos2d::Mat4 HelloWorld::getProjectionMatrix()
+{
+    
 }
 
 void HelloWorld::menuCloseCallback(Ref* pSender)

@@ -47,6 +47,9 @@ public:
     
     virtual void visit(cocos2d::Renderer *renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
     void onDraw();
+    
+    cocos2d::Mat4 getProjectionMatrix();
+    cocos2d::Mat4 getModelViewMatrix();
 private:
     cocos2d::CustomCommand _command;
     
