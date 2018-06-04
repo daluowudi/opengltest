@@ -24,6 +24,7 @@
 
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
+#include "myTest.hpp"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -118,10 +119,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     register_all_packages();
 
-    cocos2d::FileUtils::getInstance()->addSearchPath("Resource/shaders");
+    cocos2d::FileUtils::getInstance()->addSearchPath("shaders");
     
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = myTest::createScene();
 
     // run
     director->runWithScene(scene);

@@ -8,7 +8,6 @@ varying vec2 v_texCoord;
 void main()
 {
     gl_Position = CC_MVPMatrix * vec4(a_position.xyz,1);
-//    gl_Position = vec4(a_position.xyz,1);
     v_fragmentColor = a_color;
     v_texCoord = a_texCoord;
 }

@@ -25,11 +25,14 @@
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
 
+#define TEX_COORD_MAX   1
+
 #include "cocos2d.h"
 
 typedef struct {
     float Position[3];
     float Color[4];
+    float TexCoord[2];
 } Vertex;
 
 class HelloWorld : public cocos2d::Layer
@@ -50,12 +53,22 @@ public:
     
     cocos2d::Mat4 getProjectionMatrix();
     cocos2d::Mat4 getModelViewMatrix();
+    void calPos(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event *event);
 private:
     cocos2d::CustomCommand _command;
     
     GLuint vao = 0;
-//    GLuint vertexVBO = 0;
-//    GLuint colorVBO = 0;
+    GLuint textureId;
+    
+    cocos2d::Vec3 _eyePos = cocos2d::Vec3(0, 0, 10);
+    cocos2d::Vec3 _direction = cocos2d::Vec3(0, 0, -1);
+    cocos2d::Vec3 _up = cocos2d::Vec3(0, 1, 0);
+    
+    float horizontalAngle = 90.0;
+    float verticalAngle = 0.0;
+    float initialFov = 45.0f;
+    
+    float speed = 1.0f;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

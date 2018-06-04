@@ -71,83 +71,76 @@ bool HelloWorld::init()
     GLuint vertexVBO;
     glGenBuffers(1, &vertexVBO);
     glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-    // {1, 0, 0, 1}
-    // {0, 1, 0, 1}
-    // {0, 0, 1, 1}
-//    Vertex data[] = {
-//        // Front
-//        { {1, -1, 0}, {1, 0, 0, 1}},
-//        { {1, 1, 0}, {1, 0, 0, 1}},
-//        { {-1, 1, 0}, {1, 0, 0, 1}},
-//        { {-1, -1, 0}, {1, 0, 0, 1}},
-//        // Back
-//        { {1, 1, -2}, {1, 1, 0, 1}},
-//        { {-1, -1, -2}, {1, 1, 0, 1}},
-//        { {1, -1, -2}, {1, 1, 0, 1}},
-//        { {-1, 1, -2}, {1, 1, 0, 1}},
-//        // Left
-//        { {-1, -1, 0}, {1, 1, 1, 1}},
-//        { {-1, 1, 0}, {1, 1, 1, 1}},
-//        { {-1, 1, -2}, {1, 1, 1, 1}},
-//        { {-1, -1, -2}, {1, 1, 1, 1}},
-//        // Right
-//        { {1, -1, -2}, {0, 1, 0, 1}},
-//        { {1, 1, -2}, {0, 1, 0, 1}},
-//        { {1, 1, 0}, {0, 1, 0, 1}},
-//        { {1, -1, 0}, {0, 1, 0, 1}},
-//        // Top
-//        { {1, 1, 0}, {0, 1, 1, 1}},
-//        { {1, 1, -2}, {0, 1, 1, 1}},
-//        { {-1, 1, -2}, {0, 1, 1, 1}},
-//        { {-1, 1, 0}, {0, 1, 1, 1}},
-//        // Bottom
-//        { {1, -1, -2}, {0, 0, 1, 1}},
-//        { {1, -1, 0}, {0, 0, 1, 1}},
-//        { {-1, -1, 0}, {0, 0, 1, 1}},
-//        { {-1, -1, -2}, {0, 0, 1, 1}}
-//    };
+
     Vertex data[] =
     {
         // Front
-        { {1, -1, 0}, {1, 0, 0, 1}},
-        { {1, 1, 0}, {0, 1, 0, 1}},
-        { {-1, 1, 0}, {0, 0, 1, 1}},
-        { {-1, -1, 0}, {0, 0, 0, 1}},
+        { {1, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+        { {1, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+        { {-1, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+        { {-1, -1, 0}, {0, 0, 0, 1}, {0, 0}},
         // Back
-        { {1, 1, -2}, {1, 0, 0, 1}},
-        { {-1, -1, -2}, {0, 1, 0, 1}},
-        { {1, -1, -2}, {0, 0, 1, 1}},
-        { {-1, 1, -2}, {0, 0, 0, 1}},
+        { {1, 1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+        { {-1, -1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+        { {1, -1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+        { {-1, 1, -2}, {0, 0, 0, 1}, {0, 0}},
         // Left
-        { {-1, -1, 0}, {1, 0, 0, 1}},
-        { {-1, 1, 0}, {0, 1, 0, 1}},
-        { {-1, 1, -2}, {0, 0, 1, 1}},
-        { {-1, -1, -2}, {0, 0, 0, 1}},
+        { {-1, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+        { {-1, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+        { {-1, 1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+        { {-1, -1, -2}, {0, 0, 0, 1}, {0, 0}},
         // Right
-        { {1, -1, -2}, {1, 0, 0, 1}},
-        { {1, 1, -2}, {0, 1, 0, 1}},
-        { {1, 1, 0}, {0, 0, 1, 1}},
-        { {1, -1, 0}, {0, 0, 0, 1}},
+        { {1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+        { {1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+        { {1, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+        { {1, -1, 0}, {0, 0, 0, 1}, {0, 0}},
         // Top
-        { {1, 1, 0}, {1, 0, 0, 1}},
-        { {1, 1, -2}, {0, 1, 0, 1}},
-        { {-1, 1, -2}, {0, 0, 1, 1}},
-        { {-1, 1, 0}, {0, 0, 0, 1}},
+        { {1, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+        { {1, 1, -2}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+        { {-1, 1, -2}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+        { {-1, 1, 0}, {0, 0, 0, 1}, {0, 0}},
         // Bottom
-        { {1, -1, -2}, {1, 0, 0, 1}},
-        { {1, -1, 0}, {0, 1, 0, 1}},
-        { {-1, -1, 0}, {0, 0, 1, 1}},
-        { {-1, -1, -2}, {0, 0, 0, 1}}
+        { {1, -1, -2}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+        { {1, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+        { {-1, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+        { {-1, -1, -2}, {0, 0, 0, 1}, {0, 0}}
     };
 
     
     glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
-    //获取vertex attribute "a_position"的入口点
+
     GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
-    //打开入a_position入口点
     glEnableVertexAttribArray(positionLocation);
-    //传递顶点数据给a_position，注意最后一个参数是数组的偏移了。
     glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, Position));
+    
+    Sprite *sprite = Sprite::create("HelloWorld.png");
+    textureId = sprite->getTexture()->getName();
+//    glGenTextures(1, &textureId);
+////    glBindTexture(GL_TEXTURE_2D, textureId);
+//    GL::bindTexture2D(textureId);
+//    
+//    Image *image = new Image;
+//    image->initWithImageFile("HelloWorld.png");
+//    unsigned char *imageData = image->getData();
+//    int width = image->getWidth();
+//    int height = image->getHeight();
+//    
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, imageData);
+//    CC_SAFE_FREE(image);
+//    
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+////    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+////    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    
+    GLuint tex = glGetAttribLocation(program->getProgram(), "a_texCoord");
+    glEnableVertexAttribArray(tex);
+    glVertexAttribPointer(tex, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, TexCoord));
+    
+    GLuint colorLocation = glGetAttribLocation(program->getProgram(), "a_color");
+    glEnableVertexAttribArray(colorLocation);
+    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, Color));
     
     GLubyte indices[] = {
         // Front
@@ -174,29 +167,113 @@ bool HelloWorld::init()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     
-    //set for color
-//    float color[] = {
-//        0, 1, 0, 1,
-//        0, 1, 0, 1,
-//        0, 1, 0, 1,
-//        0, 1, 0, 1,
-//        0, 1, 0, 1,
-//        0, 1, 0, 1
-//    };
-//    GLuint colorVBO;
-//    glGenBuffers(1, &colorVBO);
-//    glBindBuffer(GL_ARRAY_BUFFER, colorVBO);
-//    glBufferData(GL_ARRAY_BUFFER, sizeof(color), color, GL_STATIC_DRAW);
-    
-    GLuint colorLocation = glGetAttribLocation(program->getProgram(), "a_color");
-    glEnableVertexAttribArray(colorLocation);
-    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, Color));
-    
     //for safty
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_LESS);
+    
+//    auto listenerkeyPad = EventListenerKeyboard::create();
+//    listenerkeyPad->onKeyPressed = CC_CALLBACK_2(HelloWorld::calPos, this);
+//    _eventDispatcher->addEventListenerWithSceneGraphPriority(listenerkeyPad, this);
+    
     return true;
+}
+
+void HelloWorld::onDraw()
+{
+//    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+    
+    auto director = Director::getInstance();
+    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    
+    Mat4 projectionMatrix ;//= getProjectionMatrix();
+    Mat4::createPerspective(60, 480/320, 0.1, 100, &projectionMatrix);
+    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, projectionMatrix);
+    
+    Mat4 modelViewMatrix ; //= getModelViewMatrix();
+    Mat4::createLookAt(Vec3(0,0,2), Vec3(0,0,0), Vec3(0,1,0), &modelViewMatrix);
+
+    
+    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, modelViewMatrix);
+    
+    auto program = getGLProgram();
+    program->use();
+    program->setUniformsForBuiltins();
+    
+    //use vao，因为vao记录了每一个顶点属性和缓冲区的状态，所以只需要绑定就可以使用了
+    glBindVertexArray(vao);
+    
+    GL::bindTexture2D(textureId);
+//    glBindTexture(GL_TEXTURE_2D, textureId);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (GLvoid*)0);
+    
+    glBindVertexArray(0);
+    
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 6);
+    CHECK_GL_ERROR_DEBUG();
+    
+    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    
+    //    program->setUniformsForBuiltins();
+}
+
+void HelloWorld::calPos(EventKeyboard::KeyCode keycode, cocos2d::Event *event)
+{
+    _direction = Vec3(
+        cosf(CC_DEGREES_TO_RADIANS(verticalAngle)) * sinf(CC_DEGREES_TO_RADIANS(horizontalAngle)),
+        sinf(CC_DEGREES_TO_RADIANS(verticalAngle)),
+        cosf(CC_DEGREES_TO_RADIANS(verticalAngle)) * cosf(CC_DEGREES_TO_RADIANS(horizontalAngle))
+                   
+    );
+    Vec3 right(
+        sinf(CC_DEGREES_TO_RADIANS(horizontalAngle) - M_PI/2),
+        0,
+        cosf(CC_DEGREES_TO_RADIANS(horizontalAngle) - M_PI/2)
+    );
+    
+    Vec3::cross(_direction, right, &_up);
+    
+    if (keycode == EventKeyboard::KeyCode::KEY_W)
+    {
+        _eyePos += _direction * speed;
+    }
+    
+    if (keycode == EventKeyboard::KeyCode::KEY_S)
+    {
+        _eyePos -= _direction * speed;
+    }
+    
+    if (keycode == EventKeyboard::KeyCode::KEY_A)
+    {
+        _eyePos -= right * speed;
+    }
+    
+    if (keycode == EventKeyboard::KeyCode::KEY_D)
+    {
+        _eyePos += right * speed;
+    }
+}
+
+Mat4 HelloWorld::getProjectionMatrix()
+{
+    Mat4 promat;
+    Mat4::createPerspective(initialFov, 960/640, 0.01, 100, &promat);
+    
+    return promat;
+}
+
+Mat4 HelloWorld::getModelViewMatrix()
+{
+    Mat4 mvmat;
+    Mat4::createLookAt(_eyePos, _eyePos + _direction, _up, &mvmat);
+    
+    return mvmat;
 }
 
 // on "init" you need to initialize your instance
@@ -357,60 +434,6 @@ void HelloWorld::onDraw()
     CHECK_GL_ERROR_DEBUG();
 }
 */
-
-void HelloWorld::onDraw()
-{
-    auto m = Director::getInstance()->getProjectionMatrix(0);
-    auto mv = Director::getInstance()->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    auto director = Director::getInstance();
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    
-    Mat4 projectionMatrix;
-    Mat4::createPerspective(60, 480/320, 1.0, 42, &projectionMatrix);
-    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, projectionMatrix);
-    
-    Mat4 modelViewMatrix;
-    Mat4::createLookAt(Vec3(0,0,1), Vec3(0,0,0), Vec3(0,1,0), &modelViewMatrix);
-//    modelViewMatrix.scale(0.3);
-    modelViewMatrix.translate(0.0, 0, -5);
-    
-//    static float rotation = 0;
-//    modelViewMatrix.rotate(Vec3(1,1,0),CC_DEGREES_TO_RADIANS(rotation));
-////    rotation += 0.5;
-////    if (rotation > 360) {
-////        rotation = 0;
-////    }
-//    
-    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, modelViewMatrix);
-    
-    auto program = getGLProgram();
-    program->use();
-    program->setUniformsForBuiltins();
-    
-    //use vao，因为vao记录了每一个顶点属性和缓冲区的状态，所以只需要绑定就可以使用了
-    glBindVertexArray(vao);
-    
-//    glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (GLvoid*)0);
-    
-    glBindVertexArray(0);
-    
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 6);
-    CHECK_GL_ERROR_DEBUG();
-    
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    
-//    program->setUniformsForBuiltins();
-}
-
-cocos2d::Mat4 HelloWorld::getProjectionMatrix()
-{
-    
-}
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
