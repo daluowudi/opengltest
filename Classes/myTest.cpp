@@ -162,8 +162,6 @@ void myTest::onDraw()
     glDepthMask(true);
     
     auto director = Director::getInstance();
-    auto a = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    auto b = director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
