@@ -39,10 +39,6 @@ bool myTest::init()
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
     
-    GLuint vertexVBO;
-    glGenBuffers(1, &vertexVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-    
     float w = 2;
     float wd2 = w/2;
     
@@ -79,6 +75,9 @@ bool myTest::init()
         { {wd2, -wd2, 0}, {0, 1, 1, 1}, {0, 0}},	//23
     };
     
+    GLuint vertexVBO;
+    glGenBuffers(1, &vertexVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
     
     GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
@@ -120,7 +119,7 @@ bool myTest::init()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     //    Sprite *sprite = Sprite::create("HelloWorld.png");
     //    textureId = sprite->getTexture()->getName();
