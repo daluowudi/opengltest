@@ -10,6 +10,18 @@
 
 USING_NS_CC;
 
+myTest::myTest()
+: vao(0)
+, textureId(0)
+, distance(5)
+, radianY(CC_DEGREES_TO_RADIANS(30))
+, radianX(0)
+, _update(true)
+{
+    eye.set(0, 0, distance);
+    target.set(0, 0, 0);
+}
+
 Scene* myTest::createScene()
 {
     auto scene = cocos2d::Scene::create();
@@ -44,35 +56,35 @@ bool myTest::init()
     
     V3_C4_T2 verticies[] = {
         // 前
-        { {-wd2, -wd2, 0}, {1, 0, 0, 1}, {0, 1}}, 	//0
-        { {wd2, -wd2, 0}, {1, 0, 0, 1}, {1, 1}}, 	//1
-        { {wd2, wd2, 0}, {1, 0, 0, 1}, {1, 0}}, 	//2
-        { {-wd2, wd2, 0}, {1, 0, 0, 1}, {0, 0}}, 	//3
+        { {-wd2, -wd2, wd2}, {1, 0, 0, 1}, {0, 1}}, 	//0
+        { {wd2, -wd2, wd2}, {1, 0, 0, 1}, {1, 1}}, 	//1
+        { {wd2, wd2, wd2}, {1, 0, 0, 1}, {1, 0}}, 	//2
+        { {-wd2, wd2, wd2}, {1, 0, 0, 1}, {0, 0}}, 	//3
         // 后
-        { {-wd2, -wd2, -w}, {1, 0, 1, 1}, {0, 1}},	// 4
-        { {wd2, -wd2, -w}, {1, 0, 1, 1}, {1, 1}},	// 5
-        { {wd2, wd2, -w}, {1, 0, 1, 1}, {1, 0}},	// 6
-        { {-wd2, wd2, -w}, {1, 0, 1, 1}, {0, 0}},	// 7
+        { {-wd2, -wd2, -wd2}, {1, 0, 1, 1}, {0, 1}},	// 4
+        { {wd2, -wd2, -wd2}, {1, 0, 1, 1}, {1, 1}},	// 5
+        { {wd2, wd2, -wd2}, {1, 0, 1, 1}, {1, 0}},	// 6
+        { {-wd2, wd2, -wd2}, {1, 0, 1, 1}, {0, 0}},	// 7
         // 左
-        { {-wd2, -wd2, 0}, {0, 1, 0, 1}, {0, 1}},	// 8
-        { {-wd2, -wd2, -w}, {0, 1, 0, 1}, {1, 1}},	// 9
-        { {-wd2, wd2, -w}, {0, 1, 0, 1}, {1, 0}},	// 10
-        { {-wd2, wd2, 0}, {0, 1, 0, 1}, {0, 0}},	// 11
+        { {-wd2, -wd2, wd2}, {0, 1, 0, 1}, {0, 1}},	// 8
+        { {-wd2, -wd2, -wd2}, {0, 1, 0, 1}, {1, 1}},	// 9
+        { {-wd2, wd2, -wd2}, {0, 1, 0, 1}, {1, 0}},	// 10
+        { {-wd2, wd2, wd2}, {0, 1, 0, 1}, {0, 0}},	// 11
         // 右
-        { {wd2, -wd2, 0}, {1, 1, 0, 1}, {0, 1}},	// 12
-        { {wd2, -wd2, -w}, {1, 1, 0, 1}, {1, 1}},	// 13
-        { {wd2, wd2, -w}, {1, 1, 0, 1}, {1, 0}},	// 14
-        { {wd2, wd2, 0}, {1, 1, 0, 1}, {0, 0}},		// 15
+        { {wd2, -wd2, wd2}, {1, 1, 0, 1}, {0, 1}},	// 12
+        { {wd2, -wd2, -wd2}, {1, 1, 0, 1}, {1, 1}},	// 13
+        { {wd2, wd2, -wd2}, {1, 1, 0, 1}, {1, 0}},	// 14
+        { {wd2, wd2, wd2}, {1, 1, 0, 1}, {0, 0}},		// 15
         // 上
-        { {-wd2, wd2, 0}, {0, 0, 1, 1}, {0, 1}},	// 16
-        { {-wd2, wd2, -w}, {0, 0, 1, 1}, {1, 1}},	// 17
-        { {wd2, wd2, -w}, {0, 0, 1, 1}, {1, 0}},	// 18
-        { {wd2, wd2, 0}, {0, 0, 1, 1}, {0, 0}},		// 19
+        { {-wd2, wd2, wd2}, {0, 0, 1, 1}, {0, 1}},	// 16
+        { {-wd2, wd2, -wd2}, {0, 0, 1, 1}, {1, 1}},	// 17
+        { {wd2, wd2, -wd2}, {0, 0, 1, 1}, {1, 0}},	// 18
+        { {wd2, wd2, wd2}, {0, 0, 1, 1}, {0, 0}},		// 19
         // 下
-        { {-wd2, -wd2, 0}, {0, 1, 1, 1}, {0, 1}},	// 20
-        { {-wd2, -wd2, -w}, {0, 1, 1, 1}, {1, 1}},	// 21
-        { {wd2, -wd2, -w}, {0, 1, 1, 1}, {1, 0}},	// 22
-        { {wd2, -wd2, 0}, {0, 1, 1, 1}, {0, 0}},	//23
+        { {-wd2, -wd2, wd2}, {0, 1, 1, 1}, {0, 1}},	// 20
+        { {-wd2, -wd2, -wd2}, {0, 1, 1, 1}, {1, 1}},	// 21
+        { {wd2, -wd2, -wd2}, {0, 1, 1, 1}, {1, 0}},	// 22
+        { {wd2, -wd2, wd2}, {0, 1, 1, 1}, {0, 0}},	//23
     };
     
     GLuint vertexVBO;
@@ -150,6 +162,13 @@ bool myTest::init()
                  imageData);
     CC_SAFE_DELETE(image);
     
+    // touches
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = CC_CALLBACK_2(myTest::onToucheBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(myTest::onToucheMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(myTest::onToucheEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+    
     return true;
 }
 
@@ -161,32 +180,24 @@ void myTest::onDraw()
     glDepthFunc(GL_LESS);
     glDepthMask(true);
     
-    auto director = Director::getInstance();
+    updateMVMatrix();
+    updatePMatrix();
     
+    auto director = Director::getInstance();
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     
-    Mat4 projectionMatrix;
-    Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &projectionMatrix);
-    
-    Mat4 viewMatrix;
-    Mat4::createLookAt(Vec3(0, 0, 5), Vec3(0,0,0), Vec3(0,1,0), &viewMatrix);
-    
-    Mat4 modelMatrix;
-    modelMatrix.setIdentity();
-    modelMatrix.rotate(Vec3(0, 1, 0), CC_DEGREES_TO_RADIANS(30));
-    modelMatrix.rotate(Vec3(1, 0, 0), CC_DEGREES_TO_RADIANS(20));
-    
-    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, projectionMatrix);
-    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, viewMatrix);
-    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, modelMatrix);
-    
+    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _pMatrix);
+    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _mvMatrix);
     
     auto program = getGLProgram();
     program->use();
     program->setUniformsForBuiltins();
+    
+    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
     glBindVertexArray(vao);
     
@@ -198,9 +209,7 @@ void myTest::onDraw()
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 36);
     CHECK_GL_ERROR_DEBUG();
     
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    
+    glDisable(GL_DEPTH_TEST);
     glDepthMask(false);
 }
 
@@ -210,4 +219,80 @@ void myTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTrans
     _command.init(_globalZOrder);
     _command.func = CC_CALLBACK_0(myTest::onDraw, this);
     Director::getInstance()->getRenderer()->addCommand(&_command);
+}
+
+void myTest::updateMVMatrix()
+{
+    if (_update) {
+//        local radinH -- 水平平面内夹角
+//        local radinV -- 竖直平面内夹角
+//        
+//        direction = {
+//            sin(radinH),
+//            cos(radinH) * sin(radinV),
+//            cos(radinH) * cos(radinV)
+//        }
+//        
+//        
+//        right = {
+//            sin(radinH),
+//            0,
+//            cos(radinH),
+//        }
+        Vec3 direction{
+            sin(radinH),
+            cos(radinH) * sin(radinV),
+            cos(radinH) * cos(radinV)
+        };
+        Vec3 up;
+        Vec3::cross(eye, Vec3(1,0,0), &up);
+        _mvMatrix.setIdentity();
+        Mat4::createLookAt(eye, target, up, &_mvMatrix);
+        
+//        Mat4 modelMatrix;
+//        modelMatrix.setIdentity();
+//        
+//        modelMatrix.rotate(Vec3(1, 0, 0), radianY);
+//        modelMatrix.rotate(Vec3(0, 1, 0), radianX);
+//        
+//        _mvMatrix.multiply(modelMatrix);
+//        _mvMatrix.rotate(Vec3(1, 0, 0), radianY);
+//        _mvMatrix.rotate(Vec3(0, 1, 0), radianX);
+    }
+}
+
+void myTest::updatePMatrix()
+{
+    if(_update)
+        Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &_pMatrix);
+}
+
+bool myTest::onToucheBegan(const Touch* touch, cocos2d::Event *event)
+{
+    _update = true;
+    
+    return true;
+}
+
+void myTest::onToucheMoved(const Touch* touch, cocos2d::Event *event)
+{
+//    CCLOG("myTest::onTouchMoved id = %d, x = %f, y = %f, sx = %f, yx = %f", touch->getID(), touch->getLocation().x, touch->getLocation().y, touch->getStartLocation().x,touch->getStartLocation().y);
+    
+    Size size = Director::getInstance()->getVisibleSize();
+    
+    // 0-1的坐标系
+    float npx= touch->getPreviousLocation().x/size.width;
+    float npy = touch->getPreviousLocation().y/size.height;
+    
+    float nx = touch->getLocation().x/size.width;
+    float ny = touch->getLocation().y/size.height;
+    
+    float speed = 10;
+    radianX += 2 * asinf((nx - npx) * speed / 2 / distance);
+    radianY += -2 * asinf((ny - npy) * speed / 2 / distance);
+}
+
+void myTest::onToucheEnded(const Touch* touch, cocos2d::Event *event)
+{
+    _update = false;
 }
