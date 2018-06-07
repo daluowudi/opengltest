@@ -54,8 +54,8 @@ private:
     Vec3 target;
     
     float distance;
-    float radianY;
-    float radianX;
+    float radinV;
+    float radinH;
     
     Mat4 _mvMatrix;
     Mat4 _pMatrix;

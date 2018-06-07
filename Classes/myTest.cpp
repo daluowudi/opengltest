@@ -14,8 +14,8 @@ myTest::myTest()
 : vao(0)
 , textureId(0)
 , distance(5)
-, radianY(CC_DEGREES_TO_RADIANS(30))
-, radianX(0)
+, radinV(0)
+, radinH(0)
 , _update(true)
 {
     eye.set(0, 0, distance);
@@ -240,9 +240,14 @@ void myTest::updateMVMatrix()
 //            cos(radinH),
 //        }
         Vec3 direction{
-            sin(radinH),
-            cos(radinH) * sin(radinV),
-            cos(radinH) * cos(radinV)
+            sinf(radinH),
+            cosf(radinH) * sinf(radinV),
+            cosf(radinH) * cosf(radinV)
+        };
+        Vec3 right{
+            sinf(radinH),
+            0,
+            cosf(radinH),
         };
         Vec3 up;
         Vec3::cross(eye, Vec3(1,0,0), &up);
