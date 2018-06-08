@@ -50,7 +50,6 @@ private:
     GLuint vao = 0;
     GLuint textureId;
     
-    Vec3 eye;
     Vec3 target;
     
     float distance;
@@ -59,8 +58,6 @@ private:
     
     Mat4 _mvMatrix;
     Mat4 _pMatrix;
-    
-    bool _update;
 };
 
 #endif /* myTest_hpp */

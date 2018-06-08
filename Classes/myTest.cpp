@@ -16,9 +16,7 @@ myTest::myTest()
 , distance(5)
 , radinV(0)
 , radinH(0)
-, _update(true)
 {
-    eye.set(0, 0, distance);
     target.set(0, 0, 0);
 }
 
@@ -223,59 +221,35 @@ void myTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTrans
 
 void myTest::updateMVMatrix()
 {
-    if (_update) {
-//        local radinH -- 水平平面内夹角
-//        local radinV -- 竖直平面内夹角
-//        
-//        direction = {
-//            sin(radinH),
-//            cos(radinH) * sin(radinV),
-//            cos(radinH) * cos(radinV)
-//        }
-//        
-//        
-//        right = {
-//            sin(radinH),
-//            0,
-//            cos(radinH),
-//        }
-        Vec3 direction{
-            sinf(radinH),
-            cosf(radinH) * sinf(radinV),
-            cosf(radinH) * cosf(radinV)
-        };
-        Vec3 right{
-            sinf(radinH),
-            0,
-            cosf(radinH),
-        };
-        Vec3 up;
-        Vec3::cross(eye, Vec3(1,0,0), &up);
-        _mvMatrix.setIdentity();
-        Mat4::createLookAt(eye, target, up, &_mvMatrix);
-        
-//        Mat4 modelMatrix;
-//        modelMatrix.setIdentity();
-//        
-//        modelMatrix.rotate(Vec3(1, 0, 0), radianY);
-//        modelMatrix.rotate(Vec3(0, 1, 0), radianX);
-//        
-//        _mvMatrix.multiply(modelMatrix);
-//        _mvMatrix.rotate(Vec3(1, 0, 0), radianY);
-//        _mvMatrix.rotate(Vec3(0, 1, 0), radianX);
-    }
+    Vec3 axisV{
+        0,
+        cosf(radinV),
+        sinf(radinV),
+    };
+    Vec3 axisH{
+        cosf(radinH),
+        0,
+        sinf(radinH),
+    };
+    Vec3 direction{
+        cosf(radinH),
+        sinf(radinH) * tanf(M_PI_2 - radinV),
+        sinf(radinH)
+    };
+    
+    Vec3 up;
+    Vec3::cross(axisH, axisV, &direction);
+    direction.normalize();
+    Mat4::createLookAt(direction * distance, target, axisV, &_mvMatrix);
 }
 
 void myTest::updatePMatrix()
 {
-    if(_update)
-        Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &_pMatrix);
+    Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &_pMatrix);
 }
 
 bool myTest::onToucheBegan(const Touch* touch, cocos2d::Event *event)
 {
-    _update = true;
-    
     return true;
 }
 
@@ -292,12 +266,11 @@ void myTest::onToucheMoved(const Touch* touch, cocos2d::Event *event)
     float nx = touch->getLocation().x/size.width;
     float ny = touch->getLocation().y/size.height;
     
-    float speed = 10;
-    radianX += 2 * asinf((nx - npx) * speed / 2 / distance);
-    radianY += -2 * asinf((ny - npy) * speed / 2 / distance);
+    float speed = 5;
+    radinH += 2 * asinf((nx - npx) * speed / 2 / distance);
+    radinV += 2 * asinf((ny - npy) * speed / 2 / distance);
 }
 
 void myTest::onToucheEnded(const Touch* touch, cocos2d::Event *event)
 {
-    _update = false;
 }
