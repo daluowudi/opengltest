@@ -11,7 +11,7 @@
 USING_NS_CC;
 
 myTest::myTest()
-: vao(0)
+: cubevao(0)
 , textureId(0)
 , distance(5)
 , radinV(0)
@@ -46,8 +46,18 @@ bool myTest::init()
     
     program->autorelease();
     
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    initCube();
+    initTouch();
+    
+    return true;
+}
+
+void myTest::initCube()
+{
+    auto program = getGLProgram();
+    
+    glGenVertexArrays(1, &cubevao);
+    glBindVertexArray(cubevao);
     
     float w = 2;
     float wd2 = w/2;
@@ -127,9 +137,9 @@ bool myTest::init()
     glGenBuffers(1, &indexVBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
+    
     glBindVertexArray(0);
-//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     //    Sprite *sprite = Sprite::create("HelloWorld.png");
     //    textureId = sprite->getTexture()->getName();
@@ -159,15 +169,16 @@ bool myTest::init()
                  GL_UNSIGNED_BYTE,//must be GL_UNSIGNED_BYTE
                  imageData);
     CC_SAFE_DELETE(image);
-    
+}
+
+void myTest::initTouch()
+{
     // touches
     auto listener = EventListenerTouchOneByOne::create();
     listener->onTouchBegan = CC_CALLBACK_2(myTest::onToucheBegan, this);
     listener->onTouchMoved = CC_CALLBACK_2(myTest::onToucheMoved, this);
     listener->onTouchEnded = CC_CALLBACK_2(myTest::onToucheEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-    
-    return true;
 }
 
 void myTest::onDraw()
@@ -197,7 +208,7 @@ void myTest::onDraw()
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
-    glBindVertexArray(vao);
+    glBindVertexArray(cubevao);
     
     GL::bindTexture2D(textureId);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (GLvoid*)0);
@@ -209,6 +220,11 @@ void myTest::onDraw()
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(false);
+}
+
+void myTest::initAxis()
+{
+    
 }
 
 void myTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags)
@@ -273,4 +289,5 @@ void myTest::onToucheMoved(const Touch* touch, cocos2d::Event *event)
 
 void myTest::onToucheEnded(const Touch* touch, cocos2d::Event *event)
 {
+    
 }

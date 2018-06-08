@@ -41,13 +41,16 @@ public:
     void onToucheMoved(const Touch* touch, Event* event);
     void onToucheEnded(const Touch* touch, Event* event);
     
+    void initCube();
+    void initTouch();
+    void initAxis();
 private:
     void updateMVMatrix();
     void updatePMatrix();
 private:
     CustomCommand _command;
     
-    GLuint vao = 0;
+    GLuint cubevao = 0;
     GLuint textureId;
     
     Vec3 target;
