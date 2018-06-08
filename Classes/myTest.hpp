@@ -21,6 +21,11 @@ typedef struct {
     float TexCoord[2];
 } V3_C4_T2;
 
+typedef struct {
+    float Position[3];
+    float Color[4];
+}V3_C4;
+
 class myTest : public cocos2d::Layer
 {
 public:
@@ -44,6 +49,8 @@ public:
     void initCube();
     void initTouch();
     void initAxis();
+    
+    void drawCube();
 private:
     void updateMVMatrix();
     void updatePMatrix();
@@ -51,6 +58,7 @@ private:
     CustomCommand _command;
     
     GLuint cubevao = 0;
+    GLuint axisvao = 0;
     GLuint textureId;
     
     Vec3 target;

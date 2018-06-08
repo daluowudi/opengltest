@@ -181,6 +181,38 @@ void myTest::initTouch()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
+void myTest::initAxis()
+{
+    auto program = getGLProgram();
+    
+    glGenVertexArrays(1, &axisvao);
+    glBindVertexArray(axisvao);
+    
+    float length = 4;
+    float cx = 0,cy = 0,cz = 0;
+    V3_C4 verticies[] = {
+        //x轴
+        {{length, cy, cz}, {0,1,0,1}},
+        //y轴
+        {{cx, length, cz}, {1,0,0,1}},
+        //z轴
+        {{cx, cy, length}, {0,0,1,1}}
+    };
+    
+    GLuint vertexVBO;
+    glGenBuffers(1, &vertexVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), &verticies, GL_STATIC_DRAW);
+    
+    GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
+    glEnableVertexAttribArray(positionLocation);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4), (GLvoid*)offsetof(V3_C4, Position));
+    
+    GLuint colorLocation = glGetAttribLocation(program->getProgram(), "a_color");
+    glEnableVertexAttribArray(colorLocation);
+    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(V3_C4), (GLvoid*)offsetof(V3_C4, Color));
+}
+
 void myTest::onDraw()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -205,9 +237,17 @@ void myTest::onDraw()
     program->use();
     program->setUniformsForBuiltins();
     
+    drawCube();
+    
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(false);
+}
+
+void myTest::drawCube()
+{
     glBindVertexArray(cubevao);
     
     GL::bindTexture2D(textureId);
@@ -217,14 +257,6 @@ void myTest::onDraw()
     
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 36);
     CHECK_GL_ERROR_DEBUG();
-    
-    glDisable(GL_DEPTH_TEST);
-    glDepthMask(false);
-}
-
-void myTest::initAxis()
-{
-    
 }
 
 void myTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags)
