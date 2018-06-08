@@ -47,6 +47,7 @@ bool myTest::init()
     program->autorelease();
     
     initCube();
+    initAxis();
     initTouch();
     
     return true;
@@ -171,14 +172,17 @@ void myTest::initCube()
     CC_SAFE_DELETE(image);
 }
 
-void myTest::initTouch()
+void myTest::drawCube()
 {
-    // touches
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(myTest::onToucheBegan, this);
-    listener->onTouchMoved = CC_CALLBACK_2(myTest::onToucheMoved, this);
-    listener->onTouchEnded = CC_CALLBACK_2(myTest::onToucheEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+    glBindVertexArray(cubevao);
+    
+    GL::bindTexture2D(textureId);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (GLvoid*)0);
+    
+    glBindVertexArray(0);
+    
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 36);
+    CHECK_GL_ERROR_DEBUG();
 }
 
 void myTest::initAxis()
@@ -188,15 +192,17 @@ void myTest::initAxis()
     glGenVertexArrays(1, &axisvao);
     glBindVertexArray(axisvao);
     
-    float length = 4;
+    float length = 3;
     float cx = 0,cy = 0,cz = 0;
     V3_C4 verticies[] = {
+        //原点
+        {{cx, cy, cz}, {1, 1, 1, 1}},
         //x轴
-        {{length, cy, cz}, {0,1,0,1}},
+        {{cx + length, cy, cz}, {0,1,0,1}},
         //y轴
-        {{cx, length, cz}, {1,0,0,1}},
+        {{cx, cx + length, cz}, {1,0,0,1}},
         //z轴
-        {{cx, cy, length}, {0,0,1,1}}
+        {{cx, cy, cx + length}, {0,0,1,1}}
     };
     
     GLuint vertexVBO;
@@ -211,6 +217,30 @@ void myTest::initAxis()
     GLuint colorLocation = glGetAttribLocation(program->getProgram(), "a_color");
     glEnableVertexAttribArray(colorLocation);
     glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(V3_C4), (GLvoid*)offsetof(V3_C4, Color));
+    
+    GLubyte indices[] = {
+        0,1,
+        0,2,
+        0,3
+    };
+    GLuint indexVBO;
+    glGenBuffers(1, &indexVBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
+    
+    glBindVertexArray(0);
+}
+
+void myTest::drawAxis()
+{
+    glBindVertexArray(axisvao);
+    
+    glDrawElements(GL_LINES, 6, GL_UNSIGNED_BYTE, (GLvoid*)0);
+    
+    glBindVertexArray(0);
+    
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
+    CHECK_GL_ERROR_DEBUG();
 }
 
 void myTest::onDraw()
@@ -238,25 +268,13 @@ void myTest::onDraw()
     program->setUniformsForBuiltins();
     
     drawCube();
+    drawAxis();
     
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(false);
-}
-
-void myTest::drawCube()
-{
-    glBindVertexArray(cubevao);
-    
-    GL::bindTexture2D(textureId);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (GLvoid*)0);
-    
-    glBindVertexArray(0);
-    
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 36);
-    CHECK_GL_ERROR_DEBUG();
 }
 
 void myTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags)
@@ -294,6 +312,16 @@ void myTest::updateMVMatrix()
 void myTest::updatePMatrix()
 {
     Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &_pMatrix);
+}
+
+void myTest::initTouch()
+{
+    // touches
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = CC_CALLBACK_2(myTest::onToucheBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(myTest::onToucheMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(myTest::onToucheEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
 bool myTest::onToucheBegan(const Touch* touch, cocos2d::Event *event)

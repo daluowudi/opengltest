@@ -51,6 +51,7 @@ public:
     void initAxis();
     
     void drawCube();
+    void drawAxis();
 private:
     void updateMVMatrix();
     void updatePMatrix();
