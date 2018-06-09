@@ -18,7 +18,7 @@ myTest::myTest()
 , radinH(0)
 , horizon(M_PI)
 , vertical(0)
-, pressingKey(EventKeyboard::KeyCode::KEY_W)
+, pressingKey(EventKeyboard::KeyCode::KEY_NONE)
 {
     eye.set(0, 0, 5);
     target.set(0, 0, 0);
@@ -34,6 +34,8 @@ Scene* myTest::createScene()
     
     return scene;
 }
+
+
 
 bool myTest::init()
 {
@@ -52,7 +54,8 @@ bool myTest::init()
     
     initCube();
     initAxis();
-    initTouch();
+//    initTouch();
+    initMouse();
     initKeyBoard();
     
     return true;
@@ -68,7 +71,7 @@ void myTest::onDraw()
     
 //    updateMVMatrix();
 //    updatePMatrix();
-    
+    updateEye();
     updateMVPMatrix();
     
     auto director = Director::getInstance();
@@ -150,6 +153,30 @@ void myTest::updateMVPMatrix()
     Mat4::createLookAt(eye, direction + eye, up, &_mvMatrix);
 }
 
+void myTest::updateEye()
+{
+    float speed = 0.05;
+    if (pressingKey == EventKeyboard::KeyCode::KEY_W)
+    {
+        eye += direction * speed;
+    }
+
+    if (pressingKey == EventKeyboard::KeyCode::KEY_S)
+    {
+        eye -= direction * speed;
+    }
+
+    if (pressingKey == EventKeyboard::KeyCode::KEY_A)
+    {
+        eye -= right * speed;
+    }
+
+    if (pressingKey == EventKeyboard::KeyCode::KEY_D)
+    {
+        eye += right * speed;
+    }
+}
+
 void myTest::initTouch()
 {
     // touches
@@ -167,8 +194,6 @@ bool myTest::onToucheBegan(const Touch* touch, cocos2d::Event *event)
 
 void myTest::onToucheMoved(const Touch* touch, cocos2d::Event *event)
 {
-//    CCLOG("myTest::onTouchMoved id = %d, x = %f, y = %f, sx = %f, yx = %f", touch->getID(), touch->getLocation().x, touch->getLocation().y, touch->getStartLocation().x,touch->getStartLocation().y);
-    
     Size size = Director::getInstance()->getVisibleSize();
     
     // 0-1的坐标系
@@ -188,6 +213,26 @@ void myTest::onToucheEnded(const Touch* touch, cocos2d::Event *event)
 
 }
 
+void myTest::initMouse()
+{
+    auto listener = EventListenerMouse::create();
+    listener->onMouseMove = CC_CALLBACK_1(myTest::onMouseMove, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+void myTest::onMouseMove(EventMouse *event)
+{
+    Size size = Director::getInstance()->getWinSizeInPixels();
+    float w_2 = size.width / 2;
+    float h_2 = size.height / 2;
+    
+    Vec2 pos = event->getLocationInView();
+//    CCLOG("%f %f",pos.x,pos.y);
+    
+    horizon = M_PI - (pos.x - w_2) / w_2 * M_PI_2;
+    vertical = (pos.y - h_2) / h_2 * M_PI_2;
+}
+
 void myTest::initKeyBoard()
 {
     auto listener = EventListenerKeyboard::create();
@@ -198,33 +243,12 @@ void myTest::initKeyBoard()
 
 void myTest::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 {
-    float speed = 1;
-    CCLOG("%s",event->isStopped()?"true":"flase");
-//    if (keycode == EventKeyboard::KeyCode::KEY_W)
-//    {
-//        eye += direction * speed;
-//    }
-//    
-//    if (keycode == EventKeyboard::KeyCode::KEY_S)
-//    {
-//        eye -= direction * speed;
-//    }
-//    
-//    if (keycode == EventKeyboard::KeyCode::KEY_A)
-//    {
-//        eye -= right * speed;
-//    }
-//    
-//    if (keycode == EventKeyboard::KeyCode::KEY_D)
-//    {
-//        eye += right * speed;
-//    }
+    pressingKey = keycode;
 }
 
 void myTest::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 {
-    float speed = 1;
-    CCLOG("%s",event->isStopped()?"true":"flase");
+    pressingKey = EventKeyboard::KeyCode::KEY_NONE;
 }
 
 void myTest::initCube()

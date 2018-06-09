@@ -47,6 +47,9 @@ public:
     void onToucheMoved(const Touch* touch, Event* event);
     void onToucheEnded(const Touch* touch, Event* event);
     
+    void initMouse();
+    void onMouseMove(EventMouse* event);
+    
     void initKeyBoard();
     void onKeyPressed(EventKeyboard::KeyCode, Event*);
     void onKeyReleased(EventKeyboard::KeyCode, Event*);
@@ -57,6 +60,7 @@ public:
     void drawCube();
     void drawAxis();
 private:
+    void updateEye();
     void updateMVMatrix();
     void updatePMatrix();
     void updateMVPMatrix();
