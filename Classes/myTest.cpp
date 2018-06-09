@@ -16,7 +16,10 @@ myTest::myTest()
 , distance(5)
 , radinV(0)
 , radinH(0)
+, horizon(M_PI)
+, vertical(0)
 {
+    eye.set(0, 0, 5);
     target.set(0, 0, 0);
 }
 
@@ -49,8 +52,178 @@ bool myTest::init()
     initCube();
     initAxis();
     initTouch();
+    initKeyBoard();
     
     return true;
+}
+
+void myTest::onDraw()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glDepthMask(true);
+    
+//    updateMVMatrix();
+//    updatePMatrix();
+    
+    updateMVPMatrix();
+    
+    auto director = Director::getInstance();
+    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    
+    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _pMatrix);
+    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _mvMatrix);
+    
+    auto program = getGLProgram();
+    program->use();
+    program->setUniformsForBuiltins();
+    
+    drawCube();
+    drawAxis();
+    
+    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
+    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    
+    glDisable(GL_DEPTH_TEST);
+    glDepthMask(false);
+}
+
+void myTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags)
+{
+    Layer::visit(renderer, parentTransform, parentFlags);
+    _command.init(_globalZOrder);
+    _command.func = CC_CALLBACK_0(myTest::onDraw, this);
+    Director::getInstance()->getRenderer()->addCommand(&_command);
+}
+
+void myTest::updateMVMatrix()
+{
+    Vec3 axisV{
+        0,
+        cosf(radinV),
+        sinf(radinV),
+    };
+    Vec3 axisH{
+        cosf(radinH),
+        0,
+        sinf(radinH),
+    };
+    Vec3 direction;
+    
+    Vec3 up;
+    Vec3::cross(axisH, axisV, &direction);
+    direction.normalize();
+    Mat4::createLookAt(direction * distance, target, axisV, &_mvMatrix);
+}
+
+void myTest::updatePMatrix()
+{
+    Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &_pMatrix);
+}
+
+void myTest::updateMVPMatrix()
+{
+    
+    Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &_pMatrix);
+    
+    direction.set(
+        cosf(vertical) * sinf(horizon),
+        sinf(vertical),
+        cosf(vertical) * cosf(horizon)
+    );
+    
+    right.set(
+        sinf(horizon - M_PI_2),
+        0,
+        cosf(horizon - M_PI_2)
+    );
+    
+    Vec3 up;
+    Vec3::cross(right, direction, &up);
+    
+    Mat4::createLookAt(eye, direction + eye, up, &_mvMatrix);
+}
+
+void myTest::initTouch()
+{
+    // touches
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = CC_CALLBACK_2(myTest::onToucheBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(myTest::onToucheMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(myTest::onToucheEnded, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+bool myTest::onToucheBegan(const Touch* touch, cocos2d::Event *event)
+{
+    return true;
+}
+
+void myTest::onToucheMoved(const Touch* touch, cocos2d::Event *event)
+{
+//    CCLOG("myTest::onTouchMoved id = %d, x = %f, y = %f, sx = %f, yx = %f", touch->getID(), touch->getLocation().x, touch->getLocation().y, touch->getStartLocation().x,touch->getStartLocation().y);
+    
+    Size size = Director::getInstance()->getVisibleSize();
+    
+    // 0-1的坐标系
+    float npx= touch->getPreviousLocation().x/size.width;
+    float npy = touch->getPreviousLocation().y/size.height;
+    
+    float nx = touch->getLocation().x/size.width;
+    float ny = touch->getLocation().y/size.height;
+    
+    float speed = 5;
+    horizon += -2 * asinf((nx - npx) * speed / 2 / distance);
+    vertical += 2 * asinf((ny - npy) * speed / 2 / distance);
+}
+
+void myTest::onToucheEnded(const Touch* touch, cocos2d::Event *event)
+{
+
+}
+
+void myTest::initKeyBoard()
+{
+    auto listener = EventListenerKeyboard::create();
+    listener->onKeyPressed = CC_CALLBACK_2(myTest::onKeyPressed, this);
+    listener->onKeyReleased = CC_CALLBACK_2(myTest::onKeyReleased, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+void myTest::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
+{
+    float speed = 1;
+    CCLOG("%s",event->isStopped()?"true":"flase");
+//    if (keycode == EventKeyboard::KeyCode::KEY_W)
+//    {
+//        eye += direction * speed;
+//    }
+//    
+//    if (keycode == EventKeyboard::KeyCode::KEY_S)
+//    {
+//        eye -= direction * speed;
+//    }
+//    
+//    if (keycode == EventKeyboard::KeyCode::KEY_A)
+//    {
+//        eye -= right * speed;
+//    }
+//    
+//    if (keycode == EventKeyboard::KeyCode::KEY_D)
+//    {
+//        eye += right * speed;
+//    }
+}
+
+void myTest::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
+{
+    float speed = 1;
+    CCLOG("%s",event->isStopped()?"true":"flase");
 }
 
 void myTest::initCube()
@@ -241,109 +414,4 @@ void myTest::drawAxis()
     
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
     CHECK_GL_ERROR_DEBUG();
-}
-
-void myTest::onDraw()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-    glDepthMask(true);
-    
-    updateMVMatrix();
-    updatePMatrix();
-    
-    auto director = Director::getInstance();
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->loadIdentityMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    
-    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _pMatrix);
-    director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _mvMatrix);
-    
-    auto program = getGLProgram();
-    program->use();
-    program->setUniformsForBuiltins();
-    
-    drawCube();
-    drawAxis();
-    
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-    
-    glDisable(GL_DEPTH_TEST);
-    glDepthMask(false);
-}
-
-void myTest::visit(cocos2d::Renderer *renderer, const cocos2d::Mat4 &parentTransform, uint32_t parentFlags)
-{
-    Layer::visit(renderer, parentTransform, parentFlags);
-    _command.init(_globalZOrder);
-    _command.func = CC_CALLBACK_0(myTest::onDraw, this);
-    Director::getInstance()->getRenderer()->addCommand(&_command);
-}
-
-void myTest::updateMVMatrix()
-{
-    Vec3 axisV{
-        0,
-        cosf(radinV),
-        sinf(radinV),
-    };
-    Vec3 axisH{
-        cosf(radinH),
-        0,
-        sinf(radinH),
-    };
-    Vec3 direction;
-    
-    Vec3 up;
-    Vec3::cross(axisH, axisV, &direction);
-    direction.normalize();
-    Mat4::createLookAt(direction * distance, target, axisV, &_mvMatrix);
-}
-
-void myTest::updatePMatrix()
-{
-    Mat4::createPerspective(45, GLfloat(480.0/320.0), 0.01, 100, &_pMatrix);
-}
-
-void myTest::initTouch()
-{
-    // touches
-    auto listener = EventListenerTouchOneByOne::create();
-    listener->onTouchBegan = CC_CALLBACK_2(myTest::onToucheBegan, this);
-    listener->onTouchMoved = CC_CALLBACK_2(myTest::onToucheMoved, this);
-    listener->onTouchEnded = CC_CALLBACK_2(myTest::onToucheEnded, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-}
-
-bool myTest::onToucheBegan(const Touch* touch, cocos2d::Event *event)
-{
-    return true;
-}
-
-void myTest::onToucheMoved(const Touch* touch, cocos2d::Event *event)
-{
-//    CCLOG("myTest::onTouchMoved id = %d, x = %f, y = %f, sx = %f, yx = %f", touch->getID(), touch->getLocation().x, touch->getLocation().y, touch->getStartLocation().x,touch->getStartLocation().y);
-    
-    Size size = Director::getInstance()->getVisibleSize();
-    
-    // 0-1的坐标系
-    float npx= touch->getPreviousLocation().x/size.width;
-    float npy = touch->getPreviousLocation().y/size.height;
-    
-    float nx = touch->getLocation().x/size.width;
-    float ny = touch->getLocation().y/size.height;
-    
-    float speed = 5;
-    radinH += 2 * asinf((nx - npx) * speed / 2 / distance);
-    radinV += 2 * asinf((ny - npy) * speed / 2 / distance);
-}
-
-void myTest::onToucheEnded(const Touch* touch, cocos2d::Event *event)
-{
-    
 }

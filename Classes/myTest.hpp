@@ -42,12 +42,16 @@ public:
     virtual void visit(cocos2d::Renderer *renderer, const cocos2d::Mat4& parentTransform, uint32_t parentFlags) override;
     void onDraw();
     
+    void initTouch();
     bool onToucheBegan(const Touch* touch, Event* event);
     void onToucheMoved(const Touch* touch, Event* event);
     void onToucheEnded(const Touch* touch, Event* event);
     
+    void initKeyBoard();
+    void onKeyPressed(EventKeyboard::KeyCode, Event*);
+    void onKeyReleased(EventKeyboard::KeyCode, Event*);
+    
     void initCube();
-    void initTouch();
     void initAxis();
     
     void drawCube();
@@ -55,6 +59,7 @@ public:
 private:
     void updateMVMatrix();
     void updatePMatrix();
+    void updateMVPMatrix();
 private:
     CustomCommand _command;
     
@@ -63,10 +68,16 @@ private:
     GLuint textureId;
     
     Vec3 target;
+    Vec3 eye;
+    Vec3 direction;
+    Vec3 right;
     
     float distance;
     float radinV;
     float radinH;
+    
+    float horizon;
+    float vertical;
     
     Mat4 _mvMatrix;
     Mat4 _pMatrix;
