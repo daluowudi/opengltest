@@ -18,6 +18,7 @@ myTest::myTest()
 , radinH(0)
 , horizon(M_PI)
 , vertical(0)
+, pressingKey(EventKeyboard::KeyCode::KEY_W)
 {
     eye.set(0, 0, 5);
     target.set(0, 0, 0);

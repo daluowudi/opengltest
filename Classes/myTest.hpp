@@ -76,6 +76,7 @@ private:
     float radinV;
     float radinH;
     
+    EventKeyboard::KeyCode pressingKey;
     float horizon;
     float vertical;
     
