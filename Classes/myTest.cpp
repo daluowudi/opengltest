@@ -297,11 +297,7 @@ void myTest::updateMVMatrix()
         0,
         sinf(radinH),
     };
-    Vec3 direction{
-        cosf(radinH),
-        sinf(radinH) * tanf(M_PI_2 - radinV),
-        sinf(radinH)
-    };
+    Vec3 direction;
     
     Vec3 up;
     Vec3::cross(axisH, axisV, &direction);
