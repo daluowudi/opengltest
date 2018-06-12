@@ -228,7 +228,8 @@ void myTest::onMouseMove(EventMouse *event)
     
     Vec2 pos = event->getLocationInView();
 //    CCLOG("%f %f",pos.x,pos.y);
-    
+    pos.x = clampf(pos.x, 0, size.width);
+    pos.y = clampf(pos.y, 0, size.height);
     horizon = M_PI - (pos.x - w_2) / w_2 * M_PI_2;
     vertical = (pos.y - h_2) / h_2 * M_PI_2;
 }
@@ -331,6 +332,28 @@ void myTest::initCube()
         20, 21, 22,
         22, 23, 20
     };
+
+    float vertexNl[24 * 3];
+    Vec3 temp;
+    // 计算每个顶点的法向量,不共用顶点所以非常好算
+    for (int i = 0; i < 24; i+=4) {
+        Vec3::cross((Vec3(verticies[i + 1].Position) - Vec3(verticies[i].Position)), (Vec3(verticies[i + 2].Position) - Vec3(verticies[i].Position)), &temp);
+        temp.normalize();
+        for (int j = i; j < i + 4; ++j) {
+            vertexNl[j * 3 + 0] = temp.x;
+            vertexNl[j * 3 + 1] = temp.y;
+            vertexNl[j * 3 + 2] = temp.z;
+        }
+    }
+    
+    GLuint normalVBO;
+    glGenBuffers(1, &normalVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexNl), vertexNl, GL_STATIC_DRAW);
+    
+    GLuint vertexNormalLocation = glGetAttribLocation(program->getProgram(), "a_vertexNormal");
+    glEnableVertexAttribArray(vertexNormalLocation);
+    glVertexAttribPointer(vertexNormalLocation, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
     
     GLuint indexVBO;
     glGenBuffers(1, &indexVBO);
@@ -338,6 +361,8 @@ void myTest::initCube()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     //    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     //    Sprite *sprite = Sprite::create("HelloWorld.png");
