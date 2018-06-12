@@ -53,9 +53,9 @@ bool myTest::init()
     program->autorelease();
     
     initCube();
-    initAxis();
+//    initAxis();
 //    initTouch();
-    initMouse();
+//    initMouse();
     initKeyBoard();
     
     return true;
@@ -88,7 +88,7 @@ void myTest::onDraw()
     program->setUniformsForBuiltins();
     
     drawCube();
-    drawAxis();
+//    drawAxis();
     
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
