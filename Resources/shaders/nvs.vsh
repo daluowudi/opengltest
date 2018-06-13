@@ -7,8 +7,8 @@ varying vec4 v_fragmentColor;
 varying vec2 v_texCoord;
 varying vec3 normal_cameraspace;
 varying vec3 lightdirection_camera;
-
-vec3 lightpos_world;
+varying vec3 pos_world;
+varying vec3 lightpos_world;
 
 void main()
 {
@@ -17,11 +17,11 @@ void main()
     v_texCoord = a_texCoord;
     vec3 nl = a_vertexNormal;
     
-    vec3 pos_world = a_position; // 没有对Model进行缩放和移动 M 为单位矩阵
+    pos_world = a_position; // 没有对Model进行缩放和移动 M 为单位矩阵
     vec3 pos_camera = (CC_MVMatrix * vec4(a_position, 1)).xyz;
     vec3 eyedirection_camera = vec3(0,0,0) - pos_camera;
     
-    lightpos_world = vec3(0, 0, 1);
+    lightpos_world = vec3(4, 4, 4);
     
     vec3 lightpos_cameraspace = (CC_MVMatrix * vec4(lightpos_world,1)).xyz; // mvmatrix == vmatrix
     lightdirection_camera = lightpos_cameraspace + eyedirection_camera;

@@ -18,8 +18,9 @@ USING_NS_CC;
 typedef struct {
     float Position[3];
     float Color[4];
+    float Normal[3];
     float TexCoord[2];
-} V3_C4_T2;
+} V3_C4_T2_N3;
 
 typedef struct {
     float Position[3];

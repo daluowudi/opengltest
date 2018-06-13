@@ -55,7 +55,7 @@ bool myTest::init()
     initCube();
 //    initAxis();
 //    initTouch();
-//    initMouse();
+    initMouse();
     initKeyBoard();
     
     return true;
@@ -262,37 +262,37 @@ void myTest::initCube()
     float w = 2;
     float wd2 = w/2;
     
-    V3_C4_T2 verticies[] = {
+    V3_C4_T2_N3 verticies[] = {
         // 前
-        { {-wd2, -wd2, wd2}, {1, 0, 0, 1}, {0, 1}}, 	//0
-        { {wd2, -wd2, wd2}, {1, 0, 0, 1}, {1, 1}}, 	//1
-        { {wd2, wd2, wd2}, {1, 0, 0, 1}, {1, 0}}, 	//2
-        { {-wd2, wd2, wd2}, {1, 0, 0, 1}, {0, 0}}, 	//3
+        { {-wd2, -wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {0, 1}}, 	//0
+        { {wd2, -wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {1, 1}}, 	//1
+        { {wd2, wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {1, 0}}, 	//2
+        { {-wd2, wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {0, 0}}, 	//3
         // 后
-        { {-wd2, -wd2, -wd2}, {1, 0, 1, 1}, {0, 1}},	// 4
-        { {wd2, -wd2, -wd2}, {1, 0, 1, 1}, {1, 1}},	// 5
-        { {wd2, wd2, -wd2}, {1, 0, 1, 1}, {1, 0}},	// 6
-        { {-wd2, wd2, -wd2}, {1, 0, 1, 1}, {0, 0}},	// 7
+        { {-wd2, -wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {0, 1}},	// 4
+        { {wd2, -wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {1, 1}},	// 5
+        { {wd2, wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {1, 0}},	// 6
+        { {-wd2, wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {0, 0}},	// 7
         // 左
-        { {-wd2, -wd2, wd2}, {0, 1, 0, 1}, {0, 1}},	// 8
-        { {-wd2, -wd2, -wd2}, {0, 1, 0, 1}, {1, 1}},	// 9
-        { {-wd2, wd2, -wd2}, {0, 1, 0, 1}, {1, 0}},	// 10
-        { {-wd2, wd2, wd2}, {0, 1, 0, 1}, {0, 0}},	// 11
+        { {-wd2, -wd2, wd2}, {0, 1, 0, 1}, {-1,0,0}, {0, 1}},	// 8
+        { {-wd2, -wd2, -wd2}, {0, 1, 0, 1}, {-1,0,0}, {1, 1}},	// 9
+        { {-wd2, wd2, -wd2}, {0, 1, 0, 1}, {-1,0,0}, {1, 0}},	// 10
+        { {-wd2, wd2, wd2}, {0, 1, 0, 1}, {-1,0,0}, {0, 0}},	// 11
         // 右
-        { {wd2, -wd2, wd2}, {1, 1, 0, 1}, {0, 1}},	// 12
-        { {wd2, -wd2, -wd2}, {1, 1, 0, 1}, {1, 1}},	// 13
-        { {wd2, wd2, -wd2}, {1, 1, 0, 1}, {1, 0}},	// 14
-        { {wd2, wd2, wd2}, {1, 1, 0, 1}, {0, 0}},		// 15
+        { {wd2, -wd2, wd2}, {1, 1, 0, 1}, {1,0,0}, {0, 1}},	// 12
+        { {wd2, -wd2, -wd2}, {1, 1, 0, 1}, {1,0,0}, {1, 1}},	// 13
+        { {wd2, wd2, -wd2}, {1, 1, 0, 1}, {1,0,0}, {1, 0}},	// 14
+        { {wd2, wd2, wd2}, {1, 1, 0, 1}, {1,0,0}, {0, 0}},		// 15
         // 上
-        { {-wd2, wd2, wd2}, {0, 0, 1, 1}, {0, 1}},	// 16
-        { {-wd2, wd2, -wd2}, {0, 0, 1, 1}, {1, 1}},	// 17
-        { {wd2, wd2, -wd2}, {0, 0, 1, 1}, {1, 0}},	// 18
-        { {wd2, wd2, wd2}, {0, 0, 1, 1}, {0, 0}},		// 19
+        { {-wd2, wd2, wd2}, {0, 0, 1, 1}, {0,1,0}, {0, 1}},	// 16
+        { {-wd2, wd2, -wd2}, {0, 0, 1, 1}, {0,1,0}, {1, 1}},	// 17
+        { {wd2, wd2, -wd2}, {0, 0, 1, 1}, {0,1,0}, {1, 0}},	// 18
+        { {wd2, wd2, wd2}, {0, 0, 1, 1}, {0,1,0}, {0, 0}},		// 19
         // 下
-        { {-wd2, -wd2, wd2}, {0, 1, 1, 1}, {0, 1}},	// 20
-        { {-wd2, -wd2, -wd2}, {0, 1, 1, 1}, {1, 1}},	// 21
-        { {wd2, -wd2, -wd2}, {0, 1, 1, 1}, {1, 0}},	// 22
-        { {wd2, -wd2, wd2}, {0, 1, 1, 1}, {0, 0}},	//23
+        { {-wd2, -wd2, wd2}, {0, 1, 1, 1}, {0,-1,0}, {0, 1}},	// 20
+        { {-wd2, -wd2, -wd2}, {0, 1, 1, 1}, {0,-1,0}, {1, 1}},	// 21
+        { {wd2, -wd2, -wd2}, {0, 1, 1, 1}, {0,-1,0}, {1, 0}},	// 22
+        { {wd2, -wd2, wd2}, {0, 1, 1, 1}, {0,-1,0}, {0, 0}},	//23
     };
     
     GLuint vertexVBO;
@@ -302,15 +302,19 @@ void myTest::initCube()
     
     GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
     glEnableVertexAttribArray(positionLocation);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2), (GLvoid*)offsetof(V3_C4_T2, Position));
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, Position));
     
     GLuint colorLocation = glGetAttribLocation(program->getProgram(), "a_color");
     glEnableVertexAttribArray(colorLocation);
-    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2), (GLvoid*)offsetof(V3_C4_T2, Color));
+    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, Color));
+    
+    GLuint normalLocation = glGetAttribLocation(program->getProgram(), "a_vertexNormal");
+    glEnableVertexAttribArray(normalLocation);
+    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, Normal));
     
     GLuint tex = glGetAttribLocation(program->getProgram(), "a_texCoord");
     glEnableVertexAttribArray(tex);
-    glVertexAttribPointer(tex, 2, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2), (GLvoid*)offsetof(V3_C4_T2, TexCoord));
+    glVertexAttribPointer(tex, 2, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, TexCoord));
     
     GLubyte indices[] = {
         // 前
@@ -332,28 +336,6 @@ void myTest::initCube()
         20, 21, 22,
         22, 23, 20
     };
-
-    float vertexNl[24 * 3];
-    Vec3 temp;
-    // 计算每个顶点的法向量,不共用顶点所以非常好算
-    for (int i = 0; i < 24; i+=4) {
-        Vec3::cross((Vec3(verticies[i + 1].Position) - Vec3(verticies[i].Position)), (Vec3(verticies[i + 2].Position) - Vec3(verticies[i].Position)), &temp);
-        temp.normalize();
-        for (int j = i; j < i + 4; ++j) {
-            vertexNl[j * 3 + 0] = temp.x;
-            vertexNl[j * 3 + 1] = temp.y;
-            vertexNl[j * 3 + 2] = temp.z;
-        }
-    }
-    
-    GLuint normalVBO;
-    glGenBuffers(1, &normalVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, normalVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexNl), vertexNl, GL_STATIC_DRAW);
-    
-    GLuint vertexNormalLocation = glGetAttribLocation(program->getProgram(), "a_vertexNormal");
-    glEnableVertexAttribArray(vertexNormalLocation);
-    glVertexAttribPointer(vertexNormalLocation, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
     
     GLuint indexVBO;
     glGenBuffers(1, &indexVBO);
