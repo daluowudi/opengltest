@@ -60,6 +60,8 @@ public:
     
     void drawCube();
     void drawAxis();
+    
+    void initLight();
 private:
     void updateEye();
     void updateMVMatrix();

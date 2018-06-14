@@ -9,7 +9,7 @@ varying vec3 normal_cameraspace;
 varying vec3 lightdirection_camera;
 varying vec3 pos_world;
 
-uniform vec3 lightpos_world;
+uniform vec3 u_lightpos_world;
 
 void main()
 {
@@ -22,7 +22,7 @@ void main()
     vec3 pos_camera = (CC_MVMatrix * vec4(a_position, 1)).xyz;
     vec3 eyedirection_camera = vec3(0,0,0) - pos_camera;
     
-    vec3 lightpos_cameraspace = (CC_MVMatrix * vec4(lightpos_world,1)).xyz; // mvmatrix == vmatrix
+    vec3 lightpos_cameraspace = (CC_MVMatrix * vec4(u_lightpos_world,1)).xyz; // mvmatrix == vmatrix
     lightdirection_camera = lightpos_cameraspace + eyedirection_camera;
     
     normal_cameraspace = (CC_MVMatrix * vec4(a_vertexNormal,0)).xyz;

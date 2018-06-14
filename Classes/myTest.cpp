@@ -52,6 +52,8 @@ bool myTest::init()
     
     program->autorelease();
     
+    initLight();
+    
     initCube();
 //    initAxis();
 //    initTouch();
@@ -87,9 +89,9 @@ void myTest::onDraw()
     program->use();
     program->setUniformsForBuiltins();
     
-    Vec3 lightPos{4,4,4};
-    GLuint lightPosID= glGetUniformLocation(program->getProgram(), "lightpos_world");
-    glUniform3f(lightPosID, lightPos.x, lightPos.y, lightPos.z);
+//    Vec3 lightPos{4,4,4};
+//    GLuint lightPosID= glGetUniformLocation(program->getProgram(), "lightpos_world");
+//    glUniform3f(lightPosID, lightPos.x, lightPos.y, lightPos.z);
     
     // 用一下cocos的方法 不好用?姿势有问题?
 //    (getGLProgramState())->setUniformVec3("lightpos_world", lightPos);
@@ -256,6 +258,27 @@ void myTest::onKeyPressed(EventKeyboard::KeyCode keycode, Event* event)
 void myTest::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 {
     pressingKey = EventKeyboard::KeyCode::KEY_NONE;
+}
+
+void myTest::initLight()
+{
+    auto program = getGLProgram();
+    
+    Vec3 lightPos{4,4,4};
+    GLuint lightPosID = glGetUniformLocation(program->getProgram(), "u_lightpos_world");
+    glUniform3f(lightPosID, lightPos.x, lightPos.y, lightPos.z);
+
+    Color4B lightColor{1,1,1,1};
+    GLuint lightColorID = glGetUniformLocation(program->getProgram(), "u_lightColor");
+    glUniform4f(lightColorID, lightColor.r, lightColor.g, lightColor.b, lightColor.a);
+    
+    float lightPower = 50.0;
+    GLuint lightPowerID = glGetUniformLocation(program->getProgram(), "u_lightPower");
+    glUniform1f(lightPowerID, lightPower);
+    
+    float u_backlight = 0.1;
+    GLuint backLightID = glGetUniformLocation(program->getProgram(), "u_backLight");
+    glUniform1f(backLightID, u_backlight);
 }
 
 void myTest::initCube()
