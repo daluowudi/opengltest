@@ -87,6 +87,12 @@ void myTest::onDraw()
     program->use();
     program->setUniformsForBuiltins();
     
+    Vec3 lightPos{4,4,4};
+    GLuint lightPosID= glGetUniformLocation(program->getProgram(), "lightpos_world");
+    glUniform3f(lightPosID, lightPos.x, lightPos.y, lightPos.z);
+    
+    // 用一下cocos的方法 不好用?姿势有问题?
+//    (getGLProgramState())->setUniformVec3("lightpos_world", lightPos);
     drawCube();
 //    drawAxis();
     
