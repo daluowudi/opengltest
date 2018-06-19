@@ -276,9 +276,10 @@ void myTest::initLight()
     GLuint lightPowerID = glGetUniformLocation(program->getProgram(), "u_lightPower");
     glUniform1f(lightPowerID, lightPower);
     
-    float u_backlight = 0.1;
-    GLuint backLightID = glGetUniformLocation(program->getProgram(), "u_backLight");
-    glUniform1f(backLightID, u_backlight);
+    // 环境光
+    float u_ambientlight = 0.1;
+    GLuint backLightID = glGetUniformLocation(program->getProgram(), "u_ambientlight");
+    glUniform1f(backLightID, u_ambientlight);
 }
 
 void myTest::initCube()

@@ -7,7 +7,7 @@ varying vec3 pos_world;
 uniform vec3 u_lightpos_world;
 uniform vec4 u_lightColor;
 uniform float u_lightPower;
-uniform float u_backLight;
+uniform float u_ambientlight;
 
 void main()
 {
@@ -20,7 +20,7 @@ void main()
     float distance = length(u_lightpos_world - pos_world);
     
     // 加入一点背光(模拟光照后带来反射影响模型背面,防止模型非见光面全黑)
-    vec4 backlightcolor = v_fragmentColor * u_backLight;
+    vec4 backlightcolor = v_fragmentColor * u_ambientlight;
 //    gl_FragColor = v_fragmentColor * lightColor * lightPower * cosTheta / (distance * distance) + backlightcolor;
     gl_FragColor = vec4((v_fragmentColor * u_lightColor * u_lightPower * cosTheta / (distance * distance) + backlightcolor).rgb, 1);
 }
