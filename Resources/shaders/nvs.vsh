@@ -17,7 +17,6 @@ void main()
     gl_Position = CC_MVPMatrix * vec4(a_position.xyz,1);
     v_fragmentColor = a_color;
     v_texCoord = a_texCoord;
-    vec3 nl = a_vertexNormal;
     
     pos_world = a_position; // 没有对Model进行缩放和移动 M 为单位矩阵
     vec3 pos_camera = (CC_MVMatrix * vec4(a_position, 1)).xyz;
