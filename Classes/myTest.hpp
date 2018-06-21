@@ -20,7 +20,7 @@ typedef struct {
     float Color[4];
     float Normal[3];
     float TexCoord[2];
-} V3_C4_T2_N3;
+} V3_C4_N3_T2;
 
 typedef struct {
     float Position[3];

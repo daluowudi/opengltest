@@ -292,7 +292,7 @@ void myTest::initCube()
     float w = 2;
     float wd2 = w/2;
     
-    V3_C4_T2_N3 verticies[] = {
+    V3_C4_N3_T2 verticies[] = {
         // 前
         { {-wd2, -wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {0, 1}}, 	//0
         { {wd2, -wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {1, 1}}, 	//1
@@ -332,19 +332,19 @@ void myTest::initCube()
     
     GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
     glEnableVertexAttribArray(positionLocation);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, Position));
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, Position));
     
     GLuint colorLocation = glGetAttribLocation(program->getProgram(), "a_color");
     glEnableVertexAttribArray(colorLocation);
-    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, Color));
+    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, Color));
     
     GLuint normalLocation = glGetAttribLocation(program->getProgram(), "a_vertexNormal");
     glEnableVertexAttribArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, Normal));
+    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, Normal));
     
     GLuint tex = glGetAttribLocation(program->getProgram(), "a_texCoord");
     glEnableVertexAttribArray(tex);
-    glVertexAttribPointer(tex, 2, GL_FLOAT, GL_FALSE, sizeof(V3_C4_T2_N3), (GLvoid*)offsetof(V3_C4_T2_N3, TexCoord));
+    glVertexAttribPointer(tex, 2, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, TexCoord));
     
     GLubyte indices[] = {
         // 前
