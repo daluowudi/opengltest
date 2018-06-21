@@ -412,7 +412,7 @@ void myTest::drawCube()
     glBindVertexArray(cubevao);
     
     GL::bindTexture2D(textureId);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (GLvoid*)0);
+    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_BYTE, (GLvoid*)0);
     
     glBindVertexArray(0);
     
