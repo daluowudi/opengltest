@@ -7,6 +7,7 @@
 //
 
 #include "myTest.hpp"
+#include "objloader.hpp"
 
 USING_NS_CC;
 
@@ -59,6 +60,12 @@ bool myTest::init()
 //    initTouch();
     initMouse();
     initKeyBoard();
+    
+    std::vector<std::vector<float>> out_vertices;
+    std::vector<std::vector<float>> out_uvs;
+    std::vector<std::vector<float>> out_normals;
+    
+    loadObj("res/cube.obj", out_vertices, out_uvs, out_normals);
     
     return true;
 }
