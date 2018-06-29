@@ -120,6 +120,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     register_all_packages();
 
     cocos2d::FileUtils::getInstance()->addSearchPath("shaders");
+    cocos2d::FileUtils::getInstance()->addSearchPath("res");
     
     // create a scene. it's an autorelease object
     auto scene = myTest::createScene();

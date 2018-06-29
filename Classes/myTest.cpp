@@ -61,12 +61,6 @@ bool myTest::init()
     initMouse();
     initKeyBoard();
     
-    std::vector<std::vector<float>> out_vertices;
-    std::vector<std::vector<float>> out_uvs;
-    std::vector<std::vector<float>> out_normals;
-    
-    loadObj("res/cube.obj", out_vertices, out_uvs, out_normals);
-    
     return true;
 }
 
@@ -295,93 +289,73 @@ void myTest::initCube()
     
     glGenVertexArrays(1, &cubevao);
     glBindVertexArray(cubevao);
+
     
-    float w = 2;
-    float wd2 = w/2;
+    std::vector<std::vector<float>> vertices;
+    std::vector<std::vector<float>> uvs;
+    std::vector<std::vector<float>> normals;
     
-    V3_C4_N3_T2 verticies[] = {
-        // 前
-        { {-wd2, -wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {0, 1}}, 	//0
-        { {wd2, -wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {1, 1}}, 	//1
-        { {wd2, wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {1, 0}}, 	//2
-        { {-wd2, wd2, wd2}, {1, 0, 0, 1}, {0,0,1}, {0, 0}}, 	//3
-        // 后
-        { {-wd2, -wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {0, 1}},	// 4
-        { {wd2, -wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {1, 1}},	// 5
-        { {wd2, wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {1, 0}},	// 6
-        { {-wd2, wd2, -wd2}, {1, 0, 1, 1}, {0,0,-1}, {0, 0}},	// 7
-        // 左
-        { {-wd2, -wd2, wd2}, {0, 1, 0, 1}, {-1,0,0}, {0, 1}},	// 8
-        { {-wd2, -wd2, -wd2}, {0, 1, 0, 1}, {-1,0,0}, {1, 1}},	// 9
-        { {-wd2, wd2, -wd2}, {0, 1, 0, 1}, {-1,0,0}, {1, 0}},	// 10
-        { {-wd2, wd2, wd2}, {0, 1, 0, 1}, {-1,0,0}, {0, 0}},	// 11
-        // 右
-        { {wd2, -wd2, wd2}, {1, 1, 0, 1}, {1,0,0}, {0, 1}},	// 12
-        { {wd2, -wd2, -wd2}, {1, 1, 0, 1}, {1,0,0}, {1, 1}},	// 13
-        { {wd2, wd2, -wd2}, {1, 1, 0, 1}, {1,0,0}, {1, 0}},	// 14
-        { {wd2, wd2, wd2}, {1, 1, 0, 1}, {1,0,0}, {0, 0}},		// 15
-        // 上
-        { {-wd2, wd2, wd2}, {0, 0, 1, 1}, {0,1,0}, {0, 1}},	// 16
-        { {-wd2, wd2, -wd2}, {0, 0, 1, 1}, {0,1,0}, {1, 1}},	// 17
-        { {wd2, wd2, -wd2}, {0, 0, 1, 1}, {0,1,0}, {1, 0}},	// 18
-        { {wd2, wd2, wd2}, {0, 0, 1, 1}, {0,1,0}, {0, 0}},		// 19
-        // 下
-        { {-wd2, -wd2, wd2}, {0, 1, 1, 1}, {0,-1,0}, {0, 1}},	// 20
-        { {-wd2, -wd2, -wd2}, {0, 1, 1, 1}, {0,-1,0}, {1, 1}},	// 21
-        { {wd2, -wd2, -wd2}, {0, 1, 1, 1}, {0,-1,0}, {1, 0}},	// 22
-        { {wd2, -wd2, wd2}, {0, 1, 1, 1}, {0,-1,0}, {0, 0}},	//23
-    };
+    loadObj("cube.obj", vertices, uvs, normals);
     
-    GLuint vertexVBO;
-    glGenBuffers(1, &vertexVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), verticies, GL_STATIC_DRAW);
+    GLuint verticebuffer;
+    glGenBuffers(1, &verticebuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, verticebuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices[0].size() * vertices.size(), &vertices[0][0], GL_STATIC_DRAW);
+
+    GLuint uvbuffer;
+    glGenBuffers(1, &uvbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * uvs[0].size() * uvs.size(), &uvs[0][0], GL_STATIC_DRAW);
+    
+    GLuint normalbuffer;
+    glGenBuffers(1, &normalbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals[0].size() * normals.size(), &normals[0][0], GL_STATIC_DRAW);
     
     GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
     glEnableVertexAttribArray(positionLocation);
-    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, Position));
-    
-    GLuint colorLocation = glGetAttribLocation(program->getProgram(), "a_color");
-    glEnableVertexAttribArray(colorLocation);
-    glVertexAttribPointer(colorLocation, 4, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, Color));
-    
-    GLuint normalLocation = glGetAttribLocation(program->getProgram(), "a_vertexNormal");
-    glEnableVertexAttribArray(normalLocation);
-    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, Normal));
+    glBindBuffer(GL_ARRAY_BUFFER, verticebuffer);
+    glVertexAttribPointer(positionLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     
     GLuint tex = glGetAttribLocation(program->getProgram(), "a_texCoord");
     glEnableVertexAttribArray(tex);
-    glVertexAttribPointer(tex, 2, GL_FLOAT, GL_FALSE, sizeof(V3_C4_N3_T2), (GLvoid*)offsetof(V3_C4_N3_T2, TexCoord));
+    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    glVertexAttribPointer(tex, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
     
-    GLubyte indices[] = {
-        // 前
-        0, 1, 2,
-        2, 3, 0,
-        // 后
-        4, 5, 6,
-        6, 7, 4,
-        // 左
-        8, 9, 10,
-        10, 11, 8,
-        // 右
-        12, 13, 14,
-        14, 15, 12,
-        // 上
-        16, 17, 18,
-        18, 19, 16,
-        // 下
-        20, 21, 22,
-        22, 23, 20
-    };
+    GLuint normalLocation = glGetAttribLocation(program->getProgram(), "a_vertexNormal");
+    glEnableVertexAttribArray(normalLocation);
+    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     
-    GLuint indexVBO;
-    glGenBuffers(1, &indexVBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+//    GLubyte indices[] = {
+//        // 前
+//        0, 1, 2,
+//        2, 3, 0,
+//        // 后
+//        4, 5, 6,
+//        6, 7, 4,
+//        // 左
+//        8, 9, 10,
+//        10, 11, 8,
+//        // 右
+//        12, 13, 14,
+//        14, 15, 12,
+//        // 上
+//        16, 17, 18,
+//        18, 19, 16,
+//        // 下
+//        20, 21, 22,
+//        22, 23, 20
+//    };
+//    
+//    GLuint indexVBO;
+//    glGenBuffers(1, &indexVBO);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     //    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     //    Sprite *sprite = Sprite::create("HelloWorld.png");
@@ -391,7 +365,7 @@ void myTest::initCube()
     glBindTexture(GL_TEXTURE_2D, textureId);
     
     Image *image = new Image;
-    image->initWithImageFile("HelloWorld.png");
+    image->initWithImageFile("uvmap.DDS");
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_LINEAR);
@@ -419,7 +393,9 @@ void myTest::drawCube()
     glBindVertexArray(cubevao);
     
     GL::bindTexture2D(textureId);
-    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_BYTE, (GLvoid*)0);
+//    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_BYTE, (GLvoid*)0);
+//    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
     
     glBindVertexArray(0);
     
