@@ -12,19 +12,20 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include "cocos2d.h"
 
 //using namespace std;
 //using namespace cocos2d;
 
 bool loadObj(const char * path,
-             std::vector<std::vector<float>> & out_vertices,
-             std::vector<std::vector<float>> & out_uvs,
-             std::vector<std::vector<float>> & out_normals);
+             std::vector<float> & out_vertices,
+             std::vector<float> & out_uvs,
+             std::vector<float> & out_normals);
 
 bool loadObj(std::istream &inStream,
-             std::vector<std::vector<float>> & out_vertices,
-             std::vector<std::vector<float>> & out_uvs,
-             std::vector<std::vector<float>> & out_normals);
+             std::vector<float> & out_vertices,
+             std::vector<float> & out_uvs,
+             std::vector<float> & out_normals);
 
 bool isSpace(const char c);
 

@@ -7,7 +7,6 @@
 //
 
 #include "objloader.hpp"
-#include "cocos2d.h"
 
 bool isSpace(const char c){ return (c == ' ') || (c == '\t'); }
 
@@ -59,9 +58,9 @@ void parseFloat2(float &u, float &v, const char *&token) {
 }
 
 bool loadObj(const char * path,
-             std::vector<std::vector<float>> & out_vertices,
-             std::vector<std::vector<float>> & out_uvs,
-             std::vector<std::vector<float>> & out_normals){
+             std::vector<cocos2d::Vec3> & out_vertices,
+             std::vector<cocos2d::Vec3> & out_uvs,
+             std::vector<cocos2d::Vec3> & out_normals){
     std::istringstream ifs(cocos2d::FileUtils::getInstance()->getStringFromFile(path));
     
     if (!ifs) {
@@ -72,13 +71,13 @@ bool loadObj(const char * path,
 }
 
 bool loadObj(std::istream &inStream,
-             std::vector<std::vector<float>> & out_vertices,
-             std::vector<std::vector<float>> & out_uvs,
-             std::vector<std::vector<float>> & out_normals){
+             std::vector<cocos2d::Vec3> & out_vertices,
+             std::vector<cocos2d::Vec3> & out_uvs,
+             std::vector<cocos2d::Vec3> & out_normals){
     
-    std::vector<float> vertices;
-    std::vector<float> uvs;
-    std::vector<float> normals;
+    std::vector<cocos2d::Vec3> vertices;
+    std::vector<cocos2d::Vec3> uvs;
+    std::vector<cocos2d::Vec3> normals;
     std::vector<int> v_indices,uv_indices,n_indices;
     
     int maxchars = 8192;
@@ -101,19 +100,17 @@ bool loadObj(std::istream &inStream,
         //vertex
         if (token[0] == 'v' && isSpace(token[1])) {
             token += 2;
-            float x, y, z;
-            parseFloat3(x, y, z, token);
+            cocos2d::Vec3 v;
+            parseFloat3(v.x, v.y, v.z, token);
             
-            vertices.push_back(x);
-            vertices.push_back(y);
-            vertices.push_back(z);
+            vertices.push_back(v);
             continue;
         }
         
         // uvs
         if (token[0] == 'v' && token[1] == 't' && isSpace(token[2])) {
             token += 3;
-            float u, v;
+            cocos2d::Vec2 uv;
             parseFloat2(u, v, token);
             
             uvs.push_back(u);
