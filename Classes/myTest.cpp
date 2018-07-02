@@ -358,34 +358,34 @@ void myTest::initCube()
 //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     //    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
-    //    Sprite *sprite = Sprite::create("HelloWorld.png");
-    //    textureId = sprite->getTexture()->getName();
+        Sprite *sprite = Sprite::create("uvmap.DDS");
+        textureId = sprite->getTexture()->getName();
     
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
+//    glGenTextures(1, &textureId);
+//    glBindTexture(GL_TEXTURE_2D, textureId);
     
-    Image *image = new Image;
-    image->initWithImageFile("uvmap.DDS");
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    
-    unsigned char *imageData = image->getData();
-    int width = image->getWidth();
-    int height = image->getHeight();
-    
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_RGB,
-                 width,
-                 height,
-                 0,
-                 GL_RGB,
-                 GL_UNSIGNED_BYTE,//must be GL_UNSIGNED_BYTE
-                 imageData);
-    CC_SAFE_DELETE(image);
+//    Image *image = new Image;
+//    image->initWithImageFile("uvmap.DDS");
+//    
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+//    
+//    unsigned char *imageData = image->getData();
+//    int width = image->getWidth();
+//    int height = image->getHeight();
+//    
+//    glTexImage2D(GL_TEXTURE_2D,
+//                 0,
+//                 GL_RGB,
+//                 width,
+//                 height,
+//                 0,
+//                 GL_RGB,
+//                 GL_UNSIGNED_BYTE,//must be GL_UNSIGNED_BYTE
+//                 imageData);
+//    CC_SAFE_DELETE(image);
 }
 
 void myTest::drawCube()
