@@ -291,26 +291,26 @@ void myTest::initCube()
     glBindVertexArray(cubevao);
 
     
-    std::vector<std::vector<float>> vertices;
-    std::vector<std::vector<float>> uvs;
-    std::vector<std::vector<float>> normals;
+    std::vector<float> vertices;
+    std::vector<float> uvs;
+    std::vector<float> normals;
     
     loadObj("cube.obj", vertices, uvs, normals);
     
     GLuint verticebuffer;
     glGenBuffers(1, &verticebuffer);
     glBindBuffer(GL_ARRAY_BUFFER, verticebuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices[0].size() * vertices.size(), &vertices[0][0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
     GLuint uvbuffer;
     glGenBuffers(1, &uvbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * uvs[0].size() * uvs.size(), &uvs[0][0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * uvs.size(), &uvs[0], GL_STATIC_DRAW);
     
     GLuint normalbuffer;
     glGenBuffers(1, &normalbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals[0].size() * normals.size(), &normals[0][0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals.size(), &normals[0], GL_STATIC_DRAW);
     
     GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
     glEnableVertexAttribArray(positionLocation);
@@ -394,8 +394,8 @@ void myTest::drawCube()
     
     GL::bindTexture2D(textureId);
 //    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_BYTE, (GLvoid*)0);
-//    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+   glDrawArrays(GL_TRIANGLES, 0, 36);
+    // glDrawArrays(GL_TRIANGLES, 0, 3);
     
     glBindVertexArray(0);
     

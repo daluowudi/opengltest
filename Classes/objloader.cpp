@@ -58,9 +58,9 @@ void parseFloat2(float &u, float &v, const char *&token) {
 }
 
 bool loadObj(const char * path,
-             std::vector<cocos2d::Vec3> & out_vertices,
-             std::vector<cocos2d::Vec3> & out_uvs,
-             std::vector<cocos2d::Vec3> & out_normals){
+             std::vector<float> & out_vertices,
+             std::vector<float> & out_uvs,
+             std::vector<float> & out_normals){
     std::istringstream ifs(cocos2d::FileUtils::getInstance()->getStringFromFile(path));
     
     if (!ifs) {
@@ -71,13 +71,13 @@ bool loadObj(const char * path,
 }
 
 bool loadObj(std::istream &inStream,
-             std::vector<cocos2d::Vec3> & out_vertices,
-             std::vector<cocos2d::Vec3> & out_uvs,
-             std::vector<cocos2d::Vec3> & out_normals){
+             std::vector<float> & out_vertices,
+             std::vector<float> & out_uvs,
+             std::vector<float> & out_normals){
     
-    std::vector<cocos2d::Vec3> vertices;
-    std::vector<cocos2d::Vec3> uvs;
-    std::vector<cocos2d::Vec3> normals;
+    std::vector<float> vertices;
+    std::vector<float> uvs;
+    std::vector<float> normals;
     std::vector<int> v_indices,uv_indices,n_indices;
     
     int maxchars = 8192;
@@ -100,17 +100,20 @@ bool loadObj(std::istream &inStream,
         //vertex
         if (token[0] == 'v' && isSpace(token[1])) {
             token += 2;
-            cocos2d::Vec3 v;
-            parseFloat3(v.x, v.y, v.z, token);
+            float x,y,z;
+            parseFloat3(x, y, z, token);
             
-            vertices.push_back(v);
+            vertices.push_back(x);
+            vertices.push_back(y);
+            vertices.push_back(z);
+
             continue;
         }
         
         // uvs
         if (token[0] == 'v' && token[1] == 't' && isSpace(token[2])) {
             token += 3;
-            cocos2d::Vec2 uv;
+            float u,v;
             parseFloat2(u, v, token);
             
             uvs.push_back(u);
@@ -156,16 +159,22 @@ bool loadObj(std::istream &inStream,
     
     for (size_t idx = 0; idx < v_indices.size(); ++idx) {
         size_t vidx = (v_indices[idx] - 1) * 3;
-        std::vector<float> v(begin(vertices) + vidx, begin(vertices) + vidx + 3);
-        out_vertices.push_back(v);
+        for (auto it= vertices.begin() + vidx; it!= vertices.begin() + vidx + 3; ++it)
+        {
+            out_vertices.push_back(*it);
+        }
         
         size_t uvidx = (uv_indices[idx] - 1) * 2;
-        std::vector<float> uv(begin(uvs) + uvidx, begin(uvs) + uvidx + 2);
-        out_uvs.push_back(uv);
-        
+        for (auto it= uvs.begin() + uvidx; it!= uvs.begin() + uvidx + 2; ++it)
+        {
+            out_uvs.push_back(*it);            
+        }
+
         size_t nidx = (n_indices[idx] - 1) * 3;
-        std::vector<float> n(begin(normals) + nidx, begin(normals) + nidx + 3);
-        out_normals.push_back(n);
+        for (auto it= normals.begin() + nidx; it!= normals.begin() + nidx + 3; ++it)
+        {
+            out_normals.push_back(*it);    
+        }
     }
     
     return true;

@@ -32,6 +32,6 @@ void main()
     
 //    gl_FragColor = vec4((specularColor * u_lightColor * u_lightPower * pow(cosAlpha, 5.0) / (distance * distance)  + backlightcolor ).rgb, 1);
     
-//    gl_FragColor = texture2D(CC_Texture0, v_texCoord);
-    gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+    gl_FragColor = texture2D(CC_Texture0, v_texCoord);
+//    gl_FragColor = vec4(1.0,0.0,0.0,1.0);
 }
