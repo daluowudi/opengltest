@@ -56,7 +56,7 @@ bool myTest::init()
     initLight();
     
     initCube();
-//    initAxis();
+    initAxis();
 //    initTouch();
     initMouse();
     initKeyBoard();
@@ -97,7 +97,7 @@ void myTest::onDraw()
     // 用一下cocos的方法 不好用?姿势有问题?
 //    (getGLProgramState())->setUniformVec3("lightpos_world", lightPos);
     drawCube();
-//    drawAxis();
+    drawAxis();
     
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
@@ -164,7 +164,7 @@ void myTest::updateMVPMatrix()
 
 void myTest::updateEye()
 {
-    float speed = 0.05;
+    float speed = 0.1;
     if (pressingKey == EventKeyboard::KeyCode::KEY_W)
     {
         eye += direction * speed;
@@ -237,8 +237,8 @@ void myTest::onMouseMove(EventMouse *event)
     
     Vec2 pos = event->getLocationInView();
 //    CCLOG("%f %f",pos.x,pos.y);
-    pos.x = clampf(pos.x, 0, size.width);
-    pos.y = clampf(pos.y, 0, size.height);
+//    pos.x = clampf(pos.x, 0, size.width);
+//    pos.y = clampf(pos.y, 0, size.height);
     horizon = M_PI - (pos.x - w_2) / w_2 * M_PI_2;
     vertical = (pos.y - h_2) / h_2 * M_PI_2;
 }
@@ -410,7 +410,7 @@ void myTest::initAxis()
     glGenVertexArrays(1, &axisvao);
     glBindVertexArray(axisvao);
     
-    float length = 3;
+    float length = 100;
     float cx = 0,cy = 0,cz = 0;
     V3_C4 verticies[] = {
         //原点
