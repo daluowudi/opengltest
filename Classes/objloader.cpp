@@ -115,6 +115,8 @@ bool loadObj(std::istream &inStream,
             token += 3;
             float u,v;
             parseFloat2(u, v, token);
+            // **dds纹理v是反的
+            v = 1-v;
             
             uvs.push_back(u);
             uvs.push_back(v);
