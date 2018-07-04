@@ -89,6 +89,8 @@ private:
     
     Mat4 _mvMatrix;
     Mat4 _pMatrix;
+    
+    int cubeVerticeNums;
 };
 
 #endif /* myTest_hpp */

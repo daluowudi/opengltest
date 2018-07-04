@@ -20,6 +20,7 @@ myTest::myTest()
 , horizon(M_PI)
 , vertical(0)
 , pressingKey(EventKeyboard::KeyCode::KEY_NONE)
+, cubeVerticeNums(0)
 {
     eye.set(0, 0, 5);
     target.set(0, 0, 0);
@@ -297,6 +298,8 @@ void myTest::initCube()
     
     loadObj("cube.obj", vertices, uvs, normals);
     
+    cubeVerticeNums = vertices.size();
+    
     GLuint verticebuffer;
     glGenBuffers(1, &verticebuffer);
     glBindBuffer(GL_ARRAY_BUFFER, verticebuffer);
@@ -394,12 +397,12 @@ void myTest::drawCube()
     
     GL::bindTexture2D(textureId);
 //    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_BYTE, (GLvoid*)0);
-   glDrawArrays(GL_TRIANGLES, 0, 36);
+   glDrawArrays(GL_TRIANGLES, 0, cubeVerticeNums);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     
     glBindVertexArray(0);
     
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 36);
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, cubeVerticeNums);
     CHECK_GL_ERROR_DEBUG();
 }
 
