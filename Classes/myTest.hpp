@@ -91,6 +91,9 @@ private:
     Mat4 _pMatrix;
     
     int cubeVerticeNums;
+    
+    const std::string cubeProgramKey = "cubeProgram";
+    const std::string axisProgramKey = "axisProgram";
 };
 
 #endif /* myTest_hpp */

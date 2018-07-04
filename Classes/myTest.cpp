@@ -46,18 +46,23 @@ bool myTest::init()
         return false;
     }
     
-    auto program = new GLProgram;
-    program->initWithFilenames("nvs.vsh", "nfs.fsh");
-    program->link();
-    program->updateUniforms();
-    setGLProgram(program);
+    auto cubeProgram = new GLProgram;
+    cubeProgram->initWithFilenames("nvs.vsh", "nfs.fsh");
+    cubeProgram->link();
+    cubeProgram->updateUniforms();
+    GLProgramCache::getInstance()->addGLProgram(cubeProgram, cubeProgramKey);
+    cubeProgram->autorelease();
     
-    program->autorelease();
+    auto axisProgram = new GLProgram;
+    axisProgram->initWithFilenames("axisvs.vsh", "axisfs.fsh");
+    axisProgram->link();
+    axisProgram->updateUniforms();
+    GLProgramCache::getInstance()->addGLProgram(axisProgram, axisProgramKey);
+    axisProgram->autorelease();
     
     initLight();
-    
     initCube();
-    initAxis();
+    // initAxis();
 //    initTouch();
     initMouse();
     initKeyBoard();
@@ -86,15 +91,11 @@ void myTest::onDraw()
     
     director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, _pMatrix);
     director->multiplyMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, _mvMatrix);
-    
-    auto program = getGLProgram();
-    program->use();
-    program->setUniformsForBuiltins();
 
     // 用一下cocos的方法 不好用?姿势有问题?
 //    (getGLProgramState())->setUniformVec3("lightpos_world", lightPos);
     drawCube();
-    drawAxis();
+    // drawAxis();
     
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
@@ -260,7 +261,8 @@ void myTest::onKeyReleased(EventKeyboard::KeyCode keycode, Event* event)
 
 void myTest::initLight()
 {
-    auto program = getGLProgram();
+    auto program = GLProgramCache::getInstance()->getGLProgram(cubeProgramKey);
+    program->use();
     
     Vec3 lightPos{4,4,4};
     GLuint lightPosID = glGetUniformLocation(program->getProgram(), "u_lightpos_world");
@@ -282,7 +284,8 @@ void myTest::initLight()
 
 void myTest::initCube()
 {
-    auto program = getGLProgram();
+    auto program = GLProgramCache::getInstance()->getGLProgram(cubeProgramKey);
+    program->use();
     
     glGenVertexArrays(1, &cubevao);
     glBindVertexArray(cubevao);
@@ -364,6 +367,11 @@ void myTest::initCube()
 
 void myTest::drawCube()
 {
+    auto program = GLProgramCache::getInstance()->getGLProgram(cubeProgramKey);
+//    setGLProgram(program);
+    program->use();
+    program->setUniformsForBuiltins();
+
     glBindVertexArray(cubevao);
     
     GL::bindTexture2D(textureId);
