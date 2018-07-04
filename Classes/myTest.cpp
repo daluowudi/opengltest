@@ -90,11 +90,7 @@ void myTest::onDraw()
     auto program = getGLProgram();
     program->use();
     program->setUniformsForBuiltins();
-    
-//    Vec3 lightPos{4,4,4};
-//    GLuint lightPosID= glGetUniformLocation(program->getProgram(), "lightpos_world");
-//    glUniform3f(lightPosID, lightPos.x, lightPos.y, lightPos.z);
-    
+
     // 用一下cocos的方法 不好用?姿势有问题?
 //    (getGLProgramState())->setUniformVec3("lightpos_world", lightPos);
     drawCube();
@@ -330,32 +326,6 @@ void myTest::initCube()
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
     glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     
-//    GLubyte indices[] = {
-//        // 前
-//        0, 1, 2,
-//        2, 3, 0,
-//        // 后
-//        4, 5, 6,
-//        6, 7, 4,
-//        // 左
-//        8, 9, 10,
-//        10, 11, 8,
-//        // 右
-//        12, 13, 14,
-//        14, 15, 12,
-//        // 上
-//        16, 17, 18,
-//        18, 19, 16,
-//        // 下
-//        20, 21, 22,
-//        22, 23, 20
-//    };
-//    
-//    GLuint indexVBO;
-//    glGenBuffers(1, &indexVBO);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVBO);
-//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-    
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -364,6 +334,7 @@ void myTest::initCube()
         Sprite *sprite = Sprite::create("uvmap.DDS");
         textureId = sprite->getTexture()->getName();
     
+    // 读配置的情况下下面的方法不好用，怀疑哪里的参数有问题
 //    glGenTextures(1, &textureId);
 //    glBindTexture(GL_TEXTURE_2D, textureId);
     
