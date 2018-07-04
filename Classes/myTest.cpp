@@ -46,13 +46,6 @@ bool myTest::init()
         return false;
     }
     
-    auto cubeProgram = new GLProgram;
-    cubeProgram->initWithFilenames("nvs.vsh", "nfs.fsh");
-    cubeProgram->link();
-    cubeProgram->updateUniforms();
-    GLProgramCache::getInstance()->addGLProgram(cubeProgram, cubeProgramKey);
-    cubeProgram->autorelease();
-    
     auto axisProgram = new GLProgram;
     axisProgram->initWithFilenames("axisvs.vsh", "axisfs.fsh");
     axisProgram->link();
@@ -60,9 +53,16 @@ bool myTest::init()
     GLProgramCache::getInstance()->addGLProgram(axisProgram, axisProgramKey);
     axisProgram->autorelease();
     
+    auto cubeProgram = new GLProgram;
+    cubeProgram->initWithFilenames("nvs.vsh", "nfs.fsh");
+    cubeProgram->link();
+    cubeProgram->updateUniforms();
+    GLProgramCache::getInstance()->addGLProgram(cubeProgram, cubeProgramKey);
+    cubeProgram->autorelease();
+    
     initLight();
     initCube();
-    // initAxis();
+    initAxis();
 //    initTouch();
     initMouse();
     initKeyBoard();
@@ -95,7 +95,7 @@ void myTest::onDraw()
     // 用一下cocos的方法 不好用?姿势有问题?
 //    (getGLProgramState())->setUniformVec3("lightpos_world", lightPos);
     drawCube();
-    // drawAxis();
+    drawAxis();
     
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
     director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
@@ -387,12 +387,13 @@ void myTest::drawCube()
 
 void myTest::initAxis()
 {
-    auto program = getGLProgram();
+    auto program = GLProgramCache::getInstance()->getGLProgram(axisProgramKey);
+    program->use();
     
     glGenVertexArrays(1, &axisvao);
     glBindVertexArray(axisvao);
     
-    float length = 100;
+    float length = 10;
     float cx = 0,cy = 0,cz = 0;
     V3_C4 verticies[] = {
         //原点
@@ -433,6 +434,10 @@ void myTest::initAxis()
 
 void myTest::drawAxis()
 {
+    auto program = GLProgramCache::getInstance()->getGLProgram(axisProgramKey);
+    program->use();
+    program->setUniformsForBuiltins();
+    
     glBindVertexArray(axisvao);
     
     glDrawElements(GL_LINES, 6, GL_UNSIGNED_BYTE, (GLvoid*)0);
