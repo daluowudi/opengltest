@@ -12,20 +12,21 @@
 #include <stdio.h>
 #include <string>
 #include <vector>
+#include <map>
 #include "cocos2d.h"
 
 //using namespace std;
 //using namespace cocos2d;
 
 bool loadObj(const char * path,
-             std::vector<float> & out_vertices,
-             std::vector<float> & out_uvs,
-             std::vector<float> & out_normals);
+             std::vector<float> &out_vertices,
+             std::vector<float> &out_uvs,
+             std::vector<float> &out_normals);
 
 bool loadObj(std::istream &inStream,
-             std::vector<float> & out_vertices,
-             std::vector<float> & out_uvs,
-             std::vector<float> & out_normals);
+             std::vector<float> &out_vertices,
+             std::vector<float> &out_uvs,
+             std::vector<float> &out_normals);
 
 bool isSpace(const char c);
 
@@ -36,4 +37,13 @@ void parseFloat2(float &u, float &v, const char *&token);
 
 int parseTriple(const char *&token);
 void parseTriple3(int &i1, int &i2, int &i3, const char *&token);
+
+void indexVBO(std::vector<float> &in_vertices,
+              std::vector<float> &in_uvs,
+              std::vector<float> &in_normals,
+              
+              std::vector<int> &out_indices,
+              std::vector<float> &out_vertices,
+              std::vector<float> &out_uvs,
+              std::vector<float> &out_normals);
 #endif /* objloader_hpp */

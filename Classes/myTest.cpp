@@ -291,11 +291,18 @@ void myTest::initCube()
     glBindVertexArray(cubevao);
 
     
+    std::vector<float> in_vertices;
+    std::vector<float> in_uvs;
+    std::vector<float> in_normals;
+    
+    loadObj("cube.obj", in_vertices, in_uvs, in_normals);
+    
+    std::vector<int> indices;
     std::vector<float> vertices;
     std::vector<float> uvs;
     std::vector<float> normals;
     
-    loadObj("cube.obj", vertices, uvs, normals);
+    indexVBO(in_vertices, in_uvs, in_normals, indices, vertices, uvs, normals);
     
     cubeVerticeNums = vertices.size();
     
