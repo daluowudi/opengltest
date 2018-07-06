@@ -185,13 +185,13 @@ bool loadObj(std::istream &inStream,
 struct vertexPack {
     float vertex[3];
     float normal[3];
-    float uv[3];
-    bool operator<(const vertexPack other){
+    float uv[2];
+    bool operator<(const vertexPack &other) const{
         return memcmp((void*)this, (void*)&other, sizeof(vertexPack)) > 0;
     };
 };
 
-bool getSimilarIndex(vertexPack &pack, std::map<vertexPack, int> &outIndexSaver, int &result){
+bool getSimilarIndex(vertexPack &pack, std::map<vertexPack, int> &outIndexSaver, unsigned int &result){
     auto it = outIndexSaver.find(pack);
     
     if (it == outIndexSaver.end()) {
@@ -206,7 +206,7 @@ void indexVBO(std::vector<float> &in_vertices,
               std::vector<float> &in_uvs,
               std::vector<float> &in_normals,
               
-              std::vector<int> &out_indices,
+              std::vector<unsigned int> &out_indices,
               std::vector<float> &out_vertices,
               std::vector<float> &out_uvs,
               std::vector<float> &out_normals)
@@ -214,18 +214,19 @@ void indexVBO(std::vector<float> &in_vertices,
     std::map<vertexPack, int> outIndexSaver;
     for (int i = 0; i < in_vertices.size(); i+=3) {
         vertexPack vp;
-        memcpy(&vp, 0, sizeof(vertexPack)); // 先清零再复制做比较才是正确的
+        memset(&vp, 0, sizeof(vertexPack)); // 先清零再复制做比较才是正确的
         memcpy(&(vp.vertex), &in_vertices[i], sizeof(float) * 3);
         memcpy(&(vp.normal), &in_normals[i], sizeof(float) * 3);
-        memcpy(&(vp.uv), &in_uvs[i/3*2], sizeof(float) * 2);
+        int uvidx = i/3*2;
+        memcpy(&(vp.uv), &in_uvs[uvidx], sizeof(float) * 2);
         
-        int index;
+        unsigned int index;
         if (getSimilarIndex(vp, outIndexSaver, index)) {
             out_indices.push_back(index);
         }else{
             out_vertices.insert(out_vertices.end(), in_vertices.begin() + i, in_vertices.begin() + i + 3);
-            out_uvs.insert(out_uvs.end(), in_uvs.begin() + i, in_uvs.begin() + i + 2);
-            out_normals.insert(out_normals.end(), in_normals.begin() + i, in_normals.begin() + i + 2);
+            out_uvs.insert(out_uvs.end(), in_uvs.begin() + uvidx, in_uvs.begin() + uvidx + 2);
+            out_normals.insert(out_normals.end(), in_normals.begin() + i, in_normals.begin() + i + 3);
             index = out_vertices.size() / 3 - 1;
             out_indices.push_back(index);
             outIndexSaver[vp] = index;

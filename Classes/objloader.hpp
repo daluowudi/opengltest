@@ -42,7 +42,7 @@ void indexVBO(std::vector<float> &in_vertices,
               std::vector<float> &in_uvs,
               std::vector<float> &in_normals,
               
-              std::vector<int> &out_indices,
+              std::vector<unsigned int> &out_indices,
               std::vector<float> &out_vertices,
               std::vector<float> &out_uvs,
               std::vector<float> &out_normals);

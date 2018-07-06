@@ -90,7 +90,7 @@ private:
     Mat4 _mvMatrix;
     Mat4 _pMatrix;
     
-    int cubeVerticeNums;
+    int cubeIndexNums;
     
     const std::string cubeProgramKey = "cubeProgram";
     const std::string axisProgramKey = "axisProgram";

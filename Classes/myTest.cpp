@@ -20,7 +20,7 @@ myTest::myTest()
 , horizon(M_PI)
 , vertical(0)
 , pressingKey(EventKeyboard::KeyCode::KEY_NONE)
-, cubeVerticeNums(0)
+, cubeIndexNums(0)
 {
     eye.set(0, 0, 5);
     target.set(0, 0, 0);
@@ -297,14 +297,14 @@ void myTest::initCube()
     
     loadObj("cube.obj", in_vertices, in_uvs, in_normals);
     
-    std::vector<int> indices;
+    std::vector<unsigned int> indices;
     std::vector<float> vertices;
     std::vector<float> uvs;
     std::vector<float> normals;
     
     indexVBO(in_vertices, in_uvs, in_normals, indices, vertices, uvs, normals);
     
-    cubeVerticeNums = vertices.size();
+    cubeIndexNums = indices.size();
     
     GLuint verticebuffer;
     glGenBuffers(1, &verticebuffer);
@@ -320,6 +320,11 @@ void myTest::initCube()
     glGenBuffers(1, &normalbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals.size(), &normals[0], GL_STATIC_DRAW);
+    
+    GLuint indicesbuffer;
+    glGenBuffers(1, &indicesbuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesbuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * indices.size(), &indices[0], GL_STATIC_DRAW);
     
     GLuint positionLocation = glGetAttribLocation(program->getProgram(), "a_position");
     glEnableVertexAttribArray(positionLocation);
@@ -382,13 +387,14 @@ void myTest::drawCube()
     glBindVertexArray(cubevao);
     
     GL::bindTexture2D(textureId);
-//    glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_BYTE, (GLvoid*)0);
-   glDrawArrays(GL_TRIANGLES, 0, cubeVerticeNums);
+    
+    glDrawElements(GL_TRIANGLES, cubeIndexNums, GL_UNSIGNED_INT, (GLvoid*)0);
+//   glDrawArrays(GL_TRIANGLES, 0, cubeIndexNums);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     
     glBindVertexArray(0);
     
-    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, cubeVerticeNums);
+    CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, cubeIndexNums);
     CHECK_GL_ERROR_DEBUG();
 }
 
