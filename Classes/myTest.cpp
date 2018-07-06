@@ -295,7 +295,7 @@ void myTest::initCube()
     std::vector<float> in_uvs;
     std::vector<float> in_normals;
     
-    loadObj("cube.obj", in_vertices, in_uvs, in_normals);
+    loadObj("suzanne.obj", in_vertices, in_uvs, in_normals);
     
     std::vector<unsigned int> indices;
     std::vector<float> vertices;
@@ -346,7 +346,7 @@ void myTest::initCube()
 //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     //    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
-        Sprite *sprite = Sprite::create("uvmap.DDS");
+        Sprite *sprite = Sprite::create("suzanneuvmap.DDS");
         textureId = sprite->getTexture()->getName();
     
     // 读配置的情况下下面的方法不好用，怀疑哪里的参数有问题
