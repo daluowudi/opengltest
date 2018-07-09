@@ -54,7 +54,7 @@ bool myTest::init()
     axisProgram->autorelease();
     
     auto cubeProgram = new GLProgram;
-    cubeProgram->initWithFilenames("nvs.vsh", "nfs.fsh");
+    cubeProgram->initWithFilenames("vs.vsh", "fs.fsh");
     cubeProgram->link();
     cubeProgram->updateUniforms();
     GLProgramCache::getInstance()->addGLProgram(cubeProgram, cubeProgramKey);
