@@ -233,3 +233,119 @@ void indexVBO(std::vector<float> &in_vertices,
         }
     }
 }
+
+void parseTBN(std::vector<float> &vertices,
+              std::vector<float> &uvs,
+              std::vector<float> &normals,
+              std::vector<float> &out_tangent,
+              std::vector<float> &out_bitangent)
+{
+    for (int i = 0; i < vertices.size(); i+=9)
+    {
+        cocos2d::Vec3 v0(vertices[i],vertices[i+1],vertices[i+2]);
+        cocos2d::Vec3 v1(vertices[i+3],vertices[i+4],vertices[i+5]);
+        cocos2d::Vec3 v2(vertices[i+6],vertices[i+7],vertices[i+8]);
+
+        int uidx = i/3*2;
+        cocos2d::Vec2 u0(vertices[uidx],vertices[uidx+1]);
+        cocos2d::Vec2 u1(vertices[uidx+2],vertices[uidx+3]);
+        cocos2d::Vec2 u2(vertices[uidx+4],vertices[uidx+5]);
+
+        cocos2d::Vec3 deltaPos1 = v1 - v0;
+        cocos2d::Vec3 deltaPos2 = v2 - v0;
+
+        cocos2d::Vec2 deltaUV1 = u1 - u0;
+        cocos2d::Vec2 deltaUV2 = u2 - u0;
+
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y*deltaUV2.x);
+        cocos2d::Vec3 tangent = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
+        cocos2d::Vec3 bitangent = (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x) * r;
+
+        // 所有顶点存相同的向量
+        for (int i = 0; i < 3; ++i)
+        {
+            out_tangent.push_back(tangent.x);
+            out_tangent.push_back(tangent.y);
+            out_tangent.push_back(tangent.z);
+
+            out_bitangent.push_back(bitangent.x);
+            out_bitangent.push_back(bitangent.y);
+            out_bitangent.push_back(bitangent.z);
+        }
+    }
+
+    // 正交化处理，使法线和切线垂直
+    for (int i = 0; i < vertices.size(); i+=3)
+    {
+        cocos2d::Vec3 t(out_tangent[i],out_tangent[i+1],out_tangent[i+2]);
+        cocos2d::Vec3 b(out_bitangent[i],out_bitangent[i+1],out_bitangent[i+2]);
+        cocos2d::Vec3 n(normals[i],normals[i+1],normals[i+2]);
+
+        t = t - n * cocos2d::Vec3::dot(n, t);
+        t.normalize();
+        
+        cocos2d::Vec3 temp;
+        cocos2d::Vec3::cross(n, t, &temp);
+        if (cocos2d::Vec3::dot(temp, b) < 0.0f)
+        {
+            t = t * -1.0f;
+        }
+
+        out_tangent[i] = t.x;
+        out_tangent[i+1] = t.y;
+        out_tangent[i+2] = t.z;
+    }
+}
+
+void indexVBO_TBN(std::vector<float> &in_vertices,
+                  std::vector<float> &in_uvs,
+                  std::vector<float> &in_normals,
+                  std::vector<float> &in_tangents,
+                  std::vector<float> &in_bitangents,
+                  
+                  std::vector<unsigned int> &out_indices,
+                  std::vector<float> &out_vertices,
+                  std::vector<float> &out_uvs,
+                  std::vector<float> &out_normals,
+                  std::vector<float> &out_tangents,
+                  std::vector<float> &out_bitangents)
+{
+    std::map<vertexPack, int> outIndexSaver;
+    cocos2d::Vec3 v1;
+    cocos2d::Vec3 v2;
+    for (int i = 0; i < in_vertices.size(); i+=3) {
+        vertexPack vp;
+        memset(&vp, 0, sizeof(vertexPack)); // 先清零再复制做比较才是正确的
+        memcpy(&(vp.vertex), &in_vertices[i], sizeof(float) * 3);
+        memcpy(&(vp.normal), &in_normals[i], sizeof(float) * 3);
+        int uvidx = i/3*2;
+        memcpy(&(vp.uv), &in_uvs[uvidx], sizeof(float) * 2);
+        
+        unsigned int index;
+        if (getSimilarIndex(vp, outIndexSaver, index)) {
+            out_indices.push_back(index);
+            v1.set(out_tangents[index * 3], out_tangents[index * 3 + 1], out_tangents[index * 3 + 2]);
+            v2.set(in_tangents[i], in_tangents[i + 1], in_tangents[i + 2]);
+            v1+=v2;
+            out_tangents[index] = v1.x;
+            out_tangents[index + 1] = v1.y;
+            out_tangents[index + 2] = v1.z;
+            
+            v1.set(out_bitangents[index * 3], out_bitangents[index * 3 + 1], out_bitangents[index * 3 + 2]);
+            v2.set(in_bitangents[i], in_bitangents[i + 1], in_bitangents[i + 2]);
+            v1+=v2;
+            out_bitangents[index] = v1.x;
+            out_bitangents[index + 1] = v1.y;
+            out_bitangents[index + 2] = v1.z;
+        }else{
+            out_vertices.insert(out_vertices.end(), in_vertices.begin() + i, in_vertices.begin() + i + 3);
+            out_uvs.insert(out_uvs.end(), in_uvs.begin() + uvidx, in_uvs.begin() + uvidx + 2);
+            out_normals.insert(out_normals.end(), in_normals.begin() + i, in_normals.begin() + i + 3);
+            out_tangents.insert(out_tangents.end(), in_tangents.begin() + i, in_tangents.begin() + i + 3);
+            out_bitangents.insert(out_bitangents.end(), in_bitangents.begin() + i, in_bitangents.begin() + i + 3);
+            index = out_vertices.size() / 3 - 1;
+            out_indices.push_back(index);
+            outIndexSaver[vp] = index;
+        }
+    }
+}

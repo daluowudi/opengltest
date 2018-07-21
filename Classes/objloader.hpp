@@ -46,4 +46,24 @@ void indexVBO(std::vector<float> &in_vertices,
               std::vector<float> &out_vertices,
               std::vector<float> &out_uvs,
               std::vector<float> &out_normals);
+
+void indexVBO_TBN(std::vector<float> &in_vertices,
+                  std::vector<float> &in_uvs,
+                  std::vector<float> &in_normals,
+                  std::vector<float> &in_tangents,
+                  std::vector<float> &in_bitangents,
+                  
+                  std::vector<unsigned int> &out_indices,
+                  std::vector<float> &out_vertices,
+                  std::vector<float> &out_uvs,
+                  std::vector<float> &out_normals,
+                  std::vector<float> &out_tangents,
+                  std::vector<float> &out_bitangents);
+
+void parseTBN(std::vector<float> &vertices,
+              std::vector<float> &uvs,
+              std::vector<float> &normals,
+              std::vector<float> &tangent,
+              std::vector<float> &bitangent);
+
 #endif /* objloader_hpp */

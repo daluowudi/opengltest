@@ -297,12 +297,21 @@ void myTest::initCube()
     
     loadObj("cylinder.obj", in_vertices, in_uvs, in_normals);
     
+    std::vector<float> in_tangent;
+    std::vector<float> in_bitangent;
+    
+    parseTBN(in_vertices, in_uvs, in_normals, in_tangent, in_bitangent);
+    
     std::vector<unsigned int> indices;
     std::vector<float> vertices;
     std::vector<float> uvs;
     std::vector<float> normals;
+    std::vector<float> tangent;
+    std::vector<float> bitangent;
     
-    indexVBO(in_vertices, in_uvs, in_normals, indices, vertices, uvs, normals);
+//    indexVBO(in_vertices, in_uvs, in_normals, indices, vertices, uvs, normals);
+    indexVBO_TBN(in_vertices, in_uvs, in_normals, in_tangent, in_bitangent,
+                 indices, vertices, uvs, normals, tangent, bitangent);
     
     cubeIndexNums = indices.size();
     
