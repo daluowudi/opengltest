@@ -350,13 +350,8 @@ void myTest::initCube()
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
     glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    //    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
-        Sprite *sprite = Sprite::create("diffuse.DDS");
-        textureId = sprite->getTexture()->getName();
+    Sprite *sprite = Sprite::create("diffuse.DDS");
+    textureId = sprite->getTexture()->getName();
     
     // 读配置的情况下下面的方法不好用，怀疑哪里的参数有问题
 //    glGenTextures(1, &textureId);
@@ -367,9 +362,9 @@ void myTest::initCube()
 //    
 //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//
 //    unsigned char *imageData = image->getData();
 //    int width = image->getWidth();
 //    int height = image->getHeight();
@@ -384,6 +379,10 @@ void myTest::initCube()
 //                 GL_UNSIGNED_BYTE,//must be GL_UNSIGNED_BYTE
 //                 imageData);
 //    CC_SAFE_DELETE(image);
+    
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void myTest::drawCube()
