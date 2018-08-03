@@ -73,6 +73,7 @@ private:
     GLuint cubevao = 0;
     GLuint axisvao = 0;
     GLuint textureId;
+    GLuint textureId1;
     
     Vec3 target;
     Vec3 eye;

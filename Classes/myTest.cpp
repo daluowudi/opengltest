@@ -14,6 +14,7 @@ USING_NS_CC;
 myTest::myTest()
 : cubevao(0)
 , textureId(0)
+, textureId1(0)
 , distance(5)
 , radinV(0)
 , radinH(0)
@@ -54,7 +55,8 @@ bool myTest::init()
     axisProgram->autorelease();
     
     auto cubeProgram = new GLProgram;
-    cubeProgram->initWithFilenames("vs.vsh", "fs.fsh");
+    cubeProgram->initWithFilenames("normalMapping.vsh", "normalMapping.fsh");
+//    cubeProgram->initWithFilenames("normalMapping.vsh", "normalMapping.fsh");
     cubeProgram->link();
     cubeProgram->updateUniforms();
     GLProgramCache::getInstance()->addGLProgram(cubeProgram, cubeProgramKey);
@@ -330,6 +332,16 @@ void myTest::initCube()
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals.size(), &normals[0], GL_STATIC_DRAW);
     
+    GLuint tangentbuffer;
+    glGenBuffers(1, &tangentbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, tangentbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * tangent.size(), &tangent[0], GL_STATIC_DRAW);
+    
+    GLuint bitangentbuffer;
+    glGenBuffers(1, &bitangentbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, bitangentbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * bitangent.size(), &bitangent[0], GL_STATIC_DRAW);
+    
     GLuint indicesbuffer;
     glGenBuffers(1, &indicesbuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesbuffer);
@@ -349,6 +361,22 @@ void myTest::initCube()
     glEnableVertexAttribArray(normalLocation);
     glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
     glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    
+    GLuint tangentLocation = glGetAttribLocation(program->getProgram(), "a_vertexTangent");
+    glEnableVertexAttribArray(tangentLocation);
+    glBindBuffer(GL_ARRAY_BUFFER, tangentbuffer);
+    glVertexAttribPointer(tangentLocation, 3, GL_FLOAT, GL_FLOAT, 0, (void*)0);
+    
+    GLuint bitangentLocation = glGetAttribLocation(program->getProgram(), "a_vertexBitangent");
+    glEnableVertexAttribArray(bitangentLocation);
+    glBindBuffer(bitangentLocation, bitangentbuffer);
+    glVertexAttribPointer(bitangentLocation, 3, GL_FLOAT, GL_FLOAT, 0, (void*)0);
+    
+    GLuint diffuseLocation = glGetUniformLocation(program->getProgram(), "u_diffuse_sampler");
+    glUniform1i(diffuseLocation, 0);
+    
+    Sprite *sprite1 = Sprite::create("normal.jpg");
+    textureId1 = sprite1->getTexture()->getName();
     
     Sprite *sprite = Sprite::create("diffuse.DDS");
     textureId = sprite->getTexture()->getName();
@@ -391,10 +419,20 @@ void myTest::drawCube()
 //    setGLProgram(program);
     program->use();
     program->setUniformsForBuiltins();
-
+    
     glBindVertexArray(cubevao);
     
-    GL::bindTexture2D(textureId);
+    // 传入mv3x3矩阵用于tbn计算
+    GLuint MV3X3Location = glGetUniformLocation(program->getProgram(), "MV3x3");
+    glUniformMatrix3fv(MV3X3Location, 1, GL_FALSE, &(_mvMatrix.m)[0]);
+
+    // 使用这种方式左下角的文本的纹理也会被改变，暂时不知道为什么
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D, textureId);
+    
+//    GL::bindTexture2D(textureId);
+    GL::bindTexture2DN(0, textureId);
+    GL::bindTexture2DN(1, textureId);
     
     glDrawElements(GL_TRIANGLES, cubeIndexNums, GL_UNSIGNED_INT, (GLvoid*)0);
 //   glDrawArrays(GL_TRIANGLES, 0, cubeIndexNums);
