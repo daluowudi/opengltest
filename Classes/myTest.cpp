@@ -56,7 +56,6 @@ bool myTest::init()
     
     auto cubeProgram = new GLProgram;
     cubeProgram->initWithFilenames("normalMapping.vsh", "normalMapping.fsh");
-//    cubeProgram->initWithFilenames("normalMapping.vsh", "normalMapping.fsh");
     cubeProgram->link();
     cubeProgram->updateUniforms();
     GLProgramCache::getInstance()->addGLProgram(cubeProgram, cubeProgramKey);
@@ -375,6 +374,9 @@ void myTest::initCube()
     GLuint diffuseLocation = glGetUniformLocation(program->getProgram(), "u_diffuse_sampler");
     glUniform1i(diffuseLocation, 0);
     
+    GLuint normaltextureLocation = glGetUniformLocation(program->getProgram(), "u_normal_sampler");
+    glUniform1i(normaltextureLocation, 1);
+    
     Sprite *sprite1 = Sprite::create("normal.jpg");
     textureId1 = sprite1->getTexture()->getName();
     
@@ -427,12 +429,15 @@ void myTest::drawCube()
     glUniformMatrix3fv(MV3X3Location, 1, GL_FALSE, &(_mvMatrix.m)[0]);
 
     // 使用这种方式左下角的文本的纹理也会被改变，暂时不知道为什么
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, textureId);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, textureId1);
     
 //    GL::bindTexture2D(textureId);
-    GL::bindTexture2DN(0, textureId);
-    GL::bindTexture2DN(1, textureId);
+//    GL::bindTexture2DN(0, textureId);
+//    GL::bindTexture2DN(1, textureId1);
     
     glDrawElements(GL_TRIANGLES, cubeIndexNums, GL_UNSIGNED_INT, (GLvoid*)0);
 //   glDrawArrays(GL_TRIANGLES, 0, cubeIndexNums);

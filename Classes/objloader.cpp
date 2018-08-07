@@ -247,9 +247,9 @@ void parseTBN(std::vector<float> &vertices,
         cocos2d::Vec3 v2(vertices[i+6],vertices[i+7],vertices[i+8]);
 
         int uidx = i/3*2;
-        cocos2d::Vec2 u0(vertices[uidx],vertices[uidx+1]);
-        cocos2d::Vec2 u1(vertices[uidx+2],vertices[uidx+3]);
-        cocos2d::Vec2 u2(vertices[uidx+4],vertices[uidx+5]);
+        cocos2d::Vec2 u0(uvs[uidx],uvs[uidx+1]);
+        cocos2d::Vec2 u1(uvs[uidx+2],uvs[uidx+3]);
+        cocos2d::Vec2 u2(uvs[uidx+4],uvs[uidx+5]);
 
         cocos2d::Vec3 deltaPos1 = v1 - v0;
         cocos2d::Vec3 deltaPos2 = v2 - v0;
