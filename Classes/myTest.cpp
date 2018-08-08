@@ -380,8 +380,14 @@ void myTest::initCube()
     Sprite *sprite1 = Sprite::create("normal.jpg");
     textureId1 = sprite1->getTexture()->getName();
     
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
     Sprite *sprite = Sprite::create("diffuse.DDS");
     textureId = sprite->getTexture()->getName();
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     
     // 读配置的情况下下面的方法不好用，怀疑哪里的参数有问题
 //    glGenTextures(1, &textureId);
@@ -392,8 +398,8 @@ void myTest::initCube()
 //    
 //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,  GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 //
 //    unsigned char *imageData = image->getData();
 //    int width = image->getWidth();

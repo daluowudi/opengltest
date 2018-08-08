@@ -17,7 +17,7 @@ uniform sampler2D u_normal_sampler;
 
 void main()
 {
-    vec3 texturenormal_tangentspace = texture2D(u_normal_sampler, vec2(v_texCoord.x,-v_texCoord.y)).rgb*2.0 - 1.0;
+    vec3 texturenormal_tangentspace = texture2D(u_normal_sampler, v_texCoord).rgb*2.0 - 1.0;
     vec3 n = normalize(texturenormal_tangentspace);
     vec3 l = normalize(lightdirection_tangentspace);
     float costheta = clamp(dot(n,l),0.0,1.0);
