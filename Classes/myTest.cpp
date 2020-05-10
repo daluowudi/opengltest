@@ -46,6 +46,13 @@ bool myTest::init()
     
     program->autorelease();
     
+    _axisProgram = new GLProgram;
+    _axisProgram->initWithFilenames("myVertexShader.vsh", "myFragmentShader.fsh");
+    _axisProgram->link();
+    _axisProgram->updateUniforms();
+    _axisProgram->retain();
+    _axisProgram->autorelease();
+    
     initCube();
     initAxis();
     initTouch();
@@ -187,7 +194,7 @@ void myTest::drawCube()
 
 void myTest::initAxis()
 {
-    auto program = getGLProgram();
+    auto program = _axisProgram;
     
     glGenVertexArrays(1, &axisvao);
     glBindVertexArray(axisvao);
@@ -198,9 +205,9 @@ void myTest::initAxis()
         //原点
         {{cx, cy, cz}, {1, 1, 1, 1}},
         //x轴
-        {{cx + length, cy, cz}, {0,1,0,1}},
+        {{cx + length, cy, cz}, {1,0,0,1}},
         //y轴
-        {{cx, cx + length, cz}, {1,0,0,1}},
+        {{cx, cx + length, cz}, {0,1,0,1}},
         //z轴
         {{cx, cy, cx + length}, {0,0,1,1}}
     };
@@ -267,11 +274,19 @@ void myTest::onDraw()
     program->use();
     program->setUniformsForBuiltins();
     
-    drawCube();
-    drawAxis();
+    auto billBoardLocation = program->getUniformLocation("billBoardMatrix");
+    program->setUniformLocationWithMatrix4fv(billBoardLocation, _billboardMatrix.m, 1);
     
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-    director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+    auto cameraPosLocation = program->getUniformLocation("cameraPos");
+    program->setUniformLocationWith3f(cameraPosLocation, cameraPos.x, cameraPos.y, cameraPos.z);
+//    cameraPos
+    
+    drawCube();
+    
+    _axisProgram->use();
+    _axisProgram->setUniformsForBuiltins();
+    
+    drawAxis();
     
     glDisable(GL_DEPTH_TEST);
     glDepthMask(false);
@@ -303,6 +318,13 @@ void myTest::updateMVMatrix()
     Vec3::cross(axisH, axisV, &direction);
     direction.normalize();
     Mat4::createLookAt(direction * distance, target, axisV, &_mvMatrix);
+    
+    auto billtarget = target;
+//    Mat4::createBillboard(billtarget, billtarget - direction * distance, axisV, &_billboardMatrix);
+    
+    Mat4::createBillboard(billtarget, billtarget - direction * distance, axisV, direction, &_billboardMatrix);
+    
+    cameraPos = billtarget - direction * distance;
 }
 
 void myTest::updatePMatrix()

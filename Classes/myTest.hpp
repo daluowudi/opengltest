@@ -30,7 +30,12 @@ class myTest : public cocos2d::Layer
 {
 public:
     myTest();
-    ~myTest(){};
+    ~myTest(){
+        if(_axisProgram)
+        {
+            delete _axisProgram;
+        }
+    };
     
     static cocos2d::Scene* createScene();
     
@@ -70,6 +75,10 @@ private:
     
     Mat4 _mvMatrix;
     Mat4 _pMatrix;
+    Mat4 _billboardMatrix;
+    
+    GLProgram* _axisProgram;
+    Vec3 cameraPos;
 };
 
 #endif /* myTest_hpp */
