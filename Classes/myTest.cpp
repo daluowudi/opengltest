@@ -435,6 +435,7 @@ void myTest::drawCube()
     glUniformMatrix3fv(MV3X3Location, 1, GL_FALSE, &(_mvMatrix.m)[0]);
 
     // 使用这种方式左下角的文本的纹理也会被改变，暂时不知道为什么
+    // 使用这种方式左下角的文本的纹理也会被改变（因为没有走通用方法变量没有重置，导致另一个texture被认为没有改变而没有重新加载）
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureId);
     
